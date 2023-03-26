@@ -1,0 +1,99 @@
+<div class="fotoBack">
+	<div class="container full d-flex justify-content-center align-items-center">
+		<div class="row justify-content-center">
+			<div class="col">
+				<div class="card" >
+					<div class="card-top text-center mt-3">
+						<a [routerLink]="['']"><img src="../assets/img/nullEnRojo.png" height="55rem;"></a>
+					</div>
+					<div class="card-body p-4">
+						<div class="row d-flex justify-content-center align-items-center">
+							<div class="col">
+								<form [formGroup]="formularioRegistro" (ngSubmit)="registrarse()">
+
+									<label for="campoNombreRealUsuario">Nombre</label>
+									<input type="username" class="form-input" id="campoNombreRealUsuario"
+									       aria-describedby="userRealNameHelp"
+									       placeholder="Ej: Sergio" formControlName="nombre">
+
+									<div *ngIf="formularioRegistro.get('nombre')?.touched && formularioRegistro.get('nombre')?.errors?.['required'] || nombreR == false"
+									     class="errorCualquiera">Este campo es obligatorio
+									</div>
+
+									<label for="campoNombreUsuario">Nombre de usuario</label>
+									<input type="username" class="form-input" id="campoNombreUsuario"
+									       aria-describedby="userNameHelp"
+									       placeholder="Ej: SergiOwO3232" formControlName="nombreUsuario">
+									<div *ngIf="formularioRegistro.get('nombreUsuario')?.touched && formularioRegistro.get('nombreUsuario')?.errors?.['required'] || nombreU == false"
+									     class="errorCualquiera">Este campo es obligatorio
+									</div>
+
+									<label for="campoEdad">Edad</label>
+									<input type="text" class="form-input" id="campoEdad"
+									       aria-describedby="ageHelp"
+									       placeholder="Ej: 20" formControlName="edad" >
+									<div *ngIf="formularioRegistro.get('edad')?.touched && formularioRegistro.get('edad')?.errors?.['required'] || edadU == false"
+									     class="errorCualquiera">Este campo es obligatorio
+									</div>
+									<div *ngIf="formularioRegistro.get('edad')?.touched && formularioRegistro.get('edad')?.errors?.['pattern']"
+									     class="errorCualquiera">Ingrese un edad entre 16 y 200
+									</div>
+
+									<label for="campoCorreoElectronico">Correo</label>
+									<input type="email" class="form-input" id="campoCorreoElectronico"
+									       aria-describedby="emailHelp"
+									       placeholder="Ej: Sergio.a@correo.cl" formControlName="correo">
+									<div *ngIf="formularioRegistro.get('correo')?.touched && formularioRegistro.get('correo')?.errors?.['required'] || correoU == false"
+									     class="errorCualquiera">Este campo es obligatorio
+									</div>
+									<div *ngIf="formularioRegistro.get('correo')?.touched && formularioRegistro.get('correo')?.errors?.['pattern']"
+									     class="errorCualquiera ">Este campo debe tener formato de correo
+									</div>
+
+									<label for="campoContraseña">Contraseña</label>
+									<input type="password" class="form-input" id="campoContraseña"
+									       placeholder="**********"
+									       formControlName="contraseña">
+									<div *ngIf="formularioRegistro.get('contraseña')?.touched && formularioRegistro.get('contraseña')?.errors?.['required'] || passw == false"
+									     class="errorCualquiera">Este campo es obligatorio
+									</div>
+									<div *ngIf="formularioRegistro.get('contraseña')?.touched && formularioRegistro.get('contraseña')?.errors?.['pattern']"
+									     class="errorCualquiera">
+										 <p class = "text-justify">La contraseña debe como minimo una letra, un numero, un caracter especial
+											y 8 caracteres</p>
+									</div>
+									<div id="catpchaElemen" class = "mb-1">
+										<ngx-recaptcha2 #catpchaElemen
+										                [siteKey] = "siteKey"
+										                formControlName = "recaptcha"
+										                (success) = "checkCaptcha()">
+										</ngx-recaptcha2>
+									</div>
+									<div *ngIf="buttonClicked == true && captchaResolved == false"
+									     class="errorCualquiera arreglo"> Se debe rellenar el Captcha.
+									</div>
+									<div class="text-center">
+										<button type="submit" class="btn btn-danger mt-1 ">Registrarse</button>
+									</div>
+								</form>
+
+							</div>
+						</div>
+						<hr class="my-2 d-inline-block mx-auto"
+						    style="width: 100%; background-color: #6D0000; height: 2px"/>
+						<div class="row">
+							<div class="col">
+								<div class="text-center">
+									<h5 class="mb-1 letraX">¿Ya tienes cuenta?</h5>
+									<a type="button" class="btn btn-danger arregloboton" [routerLink]="['/Login']">Iniciar sesion</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

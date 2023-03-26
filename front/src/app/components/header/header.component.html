@@ -1,0 +1,77 @@
+<header>
+  <!-- Nav Principal -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <div class="container-fluid">
+      <!-- Logo que se muestra solo cuando es pantalla pequeña -->
+        <a routerLink = "" class = "navbar-brand d-lg-none">
+          
+          <img class = "img-responsive" src = "../assets/img/null.png" height = "50px">
+        </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- Colapse div -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent" type="button">
+        <div class = "d-flex d-none d-lg-block ms-2">
+          <!-- Formulario que se muestra en pantalla grandes -->
+            <input class="form-control me-2 dropdown-toggle" placeholder="Search" [formControl] = "control" #inputS>
+          <ul class="list-group position-absolute pos" [ngClass] = '{"d-none" : clicked}'  #list>
+            <div *ngIf = "this.ejercicios">
+              <li *ngFor = "let aux of ejercicios" class="list-group-item"><a (click) = "routear(aux.idejercicio)">{{aux.tituloejercicio}}</a></li>
+            </div>
+          </ul>
+        </div>
+
+
+        <!-- Logo Clicleable -->
+        <a routerLink = "" class = "d-flex flex-grow-1 d-none d-lg-block text-center">
+          <img class = "img-responsive" src = "../assets/img/null.png" height = "50px">
+        </a>
+        <!-- Botones responsivos y principales -->
+        
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link active text-secondary" aria-current="page" [routerLink] = "['/Rutinas']">Rutinas</a>
+          </li>
+          <li class="nav-item d-flex d-none d-lg-block ms-2 my-2">
+            <a type="button" class="btn btn-danger rounded-pill" [routerLink] = "['/Rutinas']" >Rutinas</a>
+          </li>
+          <li class="nav-item d-flex d-none d-lg-block ms-2 my-2">
+            <a type="button" class="btn btn-danger rounded-pill" [routerLink] = "['/Ejercicios']">Ejercicios</a>
+          </li>
+          <li class="nav-item d-flex d-none d-lg-block ms-2 my-2">
+            <a type="button" class="btn btn-danger rounded-pill" (click)="revisarEstado()">Perfil</a>
+          </li>
+          <div class = "container-sm">
+            <li>
+              <a class="nav-link d-flex d-none d-lg-block " [routerLink] = "['/Login']" tabindex="-1" aria-disabled="true">
+                <i class="fas fa-portrait fa-fw fa-2x"></i>
+              </a>
+            </li>
+          </div>
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link active text-secondary" aria-current="page" [routerLink] = "['/Ejercicios']">Ejercicios</a>
+          </li>
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link active text-secondary" aria-current="page" [routerLink] = "['/MiPerfil']">Perfil</a>
+          </li>
+          <li class="nav-item d-block d-lg-none">
+            <a class="nav-link active text-secondary" aria-current="page" [routerLink] = "['/Login']">Login/Registro</a>
+          </li>
+        </ul>
+        <div>
+        </div>
+        <!-- Formulario para pantallas pequeñas -->
+            <input class="d-flex d-block d-lg-none form-control" placeholder="Search" [formControl] = "control" #inputS2>
+          <ul class="list-group position-absolute pos" [ngClass] = '{"d-none" : clicked2}'  #list2>
+            <div *ngIf = "this.ejercicios">
+              <li *ngFor = "let aux of ejercicios" class="list-group-item"><a (click) = "routear(aux.idejercicio)">{{aux.tituloejercicio}}</a></li>
+            </div>
+          </ul>
+      </div>
+    </div>
+  </nav>
+
+
+
+</header>

@@ -1,0 +1,26 @@
+<app-header></app-header>
+<ng-container *ngIf = "datosCargados == true">
+    <div class = "container py-5">
+        <div class = "row">
+            <div class = "col">
+                    <h1 class = "fw-bolder text-center">{{rutinaActual.titulorutina}}</h1>
+            </div>
+        </div>
+        <div class = "row">
+            <div class = "col">
+                <p class = "text-center fw-bolder">{{rutinaActual.descripcion}}</p>
+            </div>
+        </div>
+        <hr class="mb-4 mt-0 d-inline-block mx-auto"
+        style="width: 100%; background-color: #6D0000; height: 2px"/>
+    </div>
+    <div class = "container-fluid">
+        <div class = "row text-center">
+            <div class = "col-lg-4 col-md-6 col-sm-6 my-4" *ngFor="let aux of ejercicios">
+                <h4 class = "fw-bolder">{{aux.tituloejercicio}}</h4>
+                <a [routerLink] = "['/Ejercicio',aux.idejercicio]"><img class = "tamaño-fotos rounded" [src]="aux.foto" alt="Foto Referencia Abdominal"></a>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<app-footer></app-footer>

@@ -1,0 +1,32 @@
+.tipoLetra{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.tamano-foto{
+    height: 16rem;
+    width: 16rem;
+    border-radius: 50%;
+}
+
+.my-custom-scrollbar {
+    position: relative;
+    height: 200px;
+    overflow: auto;
+}
+.table-wrapper-scroll-y {
+    display: block;
+}
+
+.colorBack{
+    background-color: #C55DCE;
+}
+
+.colorBack2{
+    background-color: #47BCCD;
+}
+input[type="file"] {
+    display: none;
+}
+
+.tamañoInput{
+    size: 10rem;
+}

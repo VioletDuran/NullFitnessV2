@@ -1,0 +1,106 @@
+.fotoBack{
+  background-image: url('~/src/assets/img/fondoLoginRegistro_auto_x2.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+  background-size: cover;
+  min-height: 100vh;
+}
+.full{
+  height: 100vh;
+}
+
+.form-input{
+  width: 400px;
+  height: 30px;
+  padding-left: 15px;
+  margin-bottom: 5px;
+  border: 1px solid #00000020;
+  border-radius: 50px;
+  outline: none;
+  display:block;
+}
+#catpchaElemen{
+  transform: scale(0.70);
+  transform-origin: 0 0;
+  margin-top: 0;
+  margin-bottom: -3vh;
+  margin-right: -17vh;
+}
+
+.errorCualquieraA{
+  margin-top: -1vh;
+}
+
+
+@media (max-width: 1024px) {
+  .form-input{
+    width: 350px;
+    height: 25px;
+    padding-left: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #00000020;
+    border-radius: 50px;
+    outline: none;
+    display:block;
+  }
+  #catpchaElemen{
+    transform: scale(0.80);
+    transform-origin: 0 0;
+    margin-top: 0;
+    margin-bottom: -2vh;
+    margin-right: -17vh;
+  }
+  .arreglo{
+    margin-top: -5vh;
+  }
+  .letraX{
+    font-size: 1vh;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-input{
+    width: 180px;
+    height: 20px;
+    padding-left: 15px;
+    margin-bottom: 5px;
+    border: 1px solid #00000020;
+    border-radius: 50px;
+    outline: none;
+    display:block;
+  } 
+}
+.errorCualquiera{
+  margin-top: -10px;
+  font-size: 2vh;
+  color: red;
+  width: 300px;
+}
+
+@media (max-width: 624px) {
+  .errorCualquiera{
+    margin-top: -5px;
+    color: red;
+    font-size: 1.5vh;
+    width: 180px;
+  }
+  #catpchaElemen{
+    transform: scale(0.60);
+    transform-origin: 0 0;
+    margin-top: 0;
+    margin-bottom: -1vh;
+    margin-right: -17vh;
+  }
+  .arreglo{
+    margin-top: -4vh;
+  }
+}
+
+input.ng-invalid.ng-touched{
+  border: solid 1px red;
+}
+
+input.ng-valid.ng-touched{
+  border: solid 1px green;
+}

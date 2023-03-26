@@ -1,0 +1,7 @@
+{
+    nombre : "Diego",
+    nombreUsuario: "Dieguito",
+    edad : 20, 
+    correo : "Dieguitowo", 
+    contraseña: "fugox123"
+}

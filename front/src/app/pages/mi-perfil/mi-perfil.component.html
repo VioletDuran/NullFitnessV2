@@ -1,0 +1,73 @@
+<app-header></app-header>
+<div class = "container">
+    <div class = "row my-3">
+        <div class = "col-lg-3 text-center mt-3">
+            <img [src]="Usuario.foto" alt="Usuario Generico" class="tamano-foto">
+            <div class = "my-3">
+                <form #fotoUsu = "ngForm">
+                    <label for="file-upload" class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">
+                        Cambiar Foto
+                    </label>
+                    <input ngModel name = "fotoUsu" (change) = "cambiarFoto($event)" id="file-upload" type="file" accept=".jpg,.png"/>
+                </form>
+            </div>
+        </div>
+        <div class = "col mt-3">
+            <div class = "text-center">
+                <h3 class = "fw-bolder">Mis Datos</h3>
+                <hr class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 10rem; color:#6D0101;"/>
+            </div>
+            <div class = "container">
+                <div class = "row">
+                    <div class = "col">
+                            <h4 class = "fw-bolder margen">Nombre: <h5 class = "quitarSalto margenLetras fw-bolder">{{Usuario.nombre}}</h5></h4>
+                            <h4 class = "fw-bolder margen">Edad: <h5 class = "quitarSalto margenLetras fw-bolder">{{Usuario.edad}}</h5></h4>
+                            <h4 class = "fw-bolder margen">Peso: <h5 class = "quitarSalto margenLetras fw-bolder">{{Usuario.peso}}</h5></h4>
+                            <h4 class = "fw-bolder margen">País: <h5 class = "quitarSalto margenLetras fw-bolder">{{Usuario.nacionalidad}}</h5></h4>
+                    </div>
+                    <div class = "col">
+                        <h4 class = "fw-bolder margen">Contextura: <h5 class = "quitarSalto margenLetras fw-bolder">{{Usuario.contextura}}</h5></h4>
+                        <h4 class = "fw-bolder margen">Objetivo: <h5 class = "quitarSalto margenLetras fw-bolder">{{Usuario.objetivo}}</h5></h4>
+                        <h4 class = "fw-bolder margen">Cantidad de ejercicio: <h5 class = "quitarSalto margenLetras fw-bolder">{{Usuario.cantidad_ejercicio}}</h5></h4>
+                    </div>
+                </div>
+                <div class = "row text-center my-5">
+                    <div class = "col mx-auto">
+                        <button (click)="editarInformacion()" class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Configurar Informacion</button>
+                    </div>
+                    <div class = "col mx-auto">
+                        <button (click)="cerrarSesion()" class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Cerrar sesion</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class = "row my-3">
+        <div class = "text-center">
+            <button *ngIf="tipoUsuario == '2'" [routerLink] = "['/Administrador']" class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom mb-3">Administrador</button>
+            <h3 class = "fw-bolder">Mis Rutinas</h3>
+            <hr class="mb-4 mt-0 d-inline-block mx-auto"
+            style="width: 12rem; color:#6D0101;"/>
+        </div>
+    </div>
+    <div class = "container-fluid">
+        <form #fotoRut = "ngForm">
+        <div class = "row text-center">
+            <div class = "col-lg-4 col-md-6 col-sm-6 my-4" *ngFor="let aux of arrayMostrar">
+                <h4 class = "fw-bolder">{{aux.titulorutina}}</h4>
+                <a [routerLink] = "['/MisEjercicios',aux.idrutinas]"><img class = "tamaño-fotos rounded" [src]="aux.foto" alt="Foto Referencia Abdominal"></a>
+                <div class = "row text-center">
+                    <div class = "col my-1">
+                        <label [for] = 'aux.idrutinas' class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">
+                            Cambiar Foto
+                        </label>
+                        <input ngModel name = "fotoRuti" (change) = "cambiarFotoPriv($event,aux.idrutinas)" [id]="aux.idrutinas" type="file" accept=".jpg,.png"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+<app-footer></app-footer>

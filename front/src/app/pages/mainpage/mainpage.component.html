@@ -1,0 +1,79 @@
+<app-header></app-header>
+<div class="fotoprincipal" style="background-image: url('../../../assets/img/fot.jpg');">
+  <div class="color-overlay d-flex justify-content-center align-items-center">
+    <h2 class="fw-bolder responsive-font-example">"EL UNICO ENTRENAMIENTO<br>
+      MALO ES AQUEL QUE NO<br>
+      SE HA HECHO"</h2>
+  </div>
+</div>
+<!-- Foto Principal -->
+<!-- Cartas de ejercicios -->
+<div class="container">
+  <div class="row my-4">
+    <div class="row cards" style="width: auto; margin: auto auto;">
+      <div class="col-xl-4 col-md-6 col-lg-5 col-sm-12 mb-2 mx-auto" *ngFor="let ejercicio of ejerciciopublico.slice(0,3)">
+        <div class="card card-height h-100">
+          <img [src]="ejercicio.foto" class="card-img-top" [title]="ejercicio.titulofoto">
+          <div class="card-body">
+            <h4 class="card-text">{{ejercicio.tituloejercicio}}</h4>
+            <p class="card-text">{{ejercicio.descripcion}}</p>
+
+          </div>
+          <div class = "card-footer">
+            <div class="col text-center">
+              <a type='buttom' [routerLink] = "['/Ejercicio',ejercicio.idejercicio]" class="btn-fblanco btn btn-danger rounded-pill text-uppercase">Dirigir</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Cartas de ejercicios -->
+<!-- Parte roja pagina abajo -->
+<div class="container-fluid py-5" style="background-color: #8B0000">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-lg-6 col-md-5 text-center">
+      <img class="img-responsive" src="../../../assets/img/ejercicio.png" height="300px">
+    </div>
+    <div class="col-lg-6 col-md-4 col-sm-10 mt-3 text-center">
+      <div class="col-lg-8 col-md-10 col-sm-10">
+        <h2 class="fw-bolder text-white">Lorem Ipsum</h2>
+        <p class="text-white fw-bolder">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus
+          necessitatibus accusantium similique officiis reprehenderit culpa iusto sunt sint autem minima
+          odio, dignissimos iure? Fuga, distinctio accusantium neque quia repellat temporibus.</p>
+        <div class="col text-center">
+          <div class="mx-5">
+            <a href="#"
+               class="btn btn-light rounded-pill text-uppercase fw-bolder text-custom">Dirigir</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Parte roja pagina abajo -->
+<!-- Parte blanca antes del footer -->
+<div class="container-fluid py-5" style="background-color: #FFFFFF">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-lg-6 col-md-4 col-sm-10 mt-3 text-center">
+      <div class="col-lg-8 col-md-10 col-sm-10">
+        <h2 class="fw-bolder">Lorem Ipsum</h2>
+        <p class="fw-bolder">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus necessitatibus
+          accusantium similique officiis reprehenderit culpa iusto sunt sint autem minima odio,
+          dignissimos iure? Fuga, distinctio accusantium neque quia repellat temporibus.</p>
+        <div class="col text-center">
+          <div class="mx-5">
+            <a type='buttom' href="#" class="btn-fblanco mt-3 btn btn-custom rounded-pill text-uppercase">Dirigir</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-4 text-center">
+      <img class="img-responsive foto-abajo" src="../../../assets/img/ejercicio2.png">
+    </div>
+  </div>
+  <!-- Parte blanca antes del footer -->
+</div>
+
+<app-footer></app-footer>

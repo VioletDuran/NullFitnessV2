@@ -1,0 +1,77 @@
+<app-header></app-header>
+<body>
+    <ng-container *ngIf = "datosCargados == true">
+        <div class = "container text-center">
+            <div class = "row mt-5">
+                <div class = "col">
+                    <div><img [src]="Usuario.foto" alt="Usuario Generico" class="tamano-foto my-2"></div>
+                    <h3 class = "fw-bolder tipoLetra">¡Bienvenido administrador {{Usuario.nombre}}!</h3>
+                    <hr class="d-inline-block"
+                    style="width:12rem; color:#6D0101;"/>
+                </div>
+            </div>
+        </div>
+        <div class = "container">
+            <div class = "row">
+                <div class = "col my-5">
+                    <h3 class = "fw-bolder tipoLetra">Seccion de ejercicios</h3>
+                    <hr class="d-inline-block "
+                    style="width:17rem; color:#6D0101;"/>
+                    <div class="table-wrapper-scroll-y my-custom-scrollbar text-center">
+                        <table class="table table-bordered table-striped mb-0">
+                          <thead>
+                            <tr class = "colorBack">
+                              <th scope="col">Nombre ejercicio</th>
+                              <th scope="col">Editar información</th>
+                              <th scope="col">Eliminar</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor = "let aux of ejerciciosTotales" class = "colorBack2">
+                              <th scope="row">{{aux.tituloejercicio}}</th>
+                              <td><button (click) = "modificarEjercicio(aux.idejercicio)"  class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Editar</button></td>
+                              <td><button (click) = "eliminarEjercicio(aux.idejercicio)"  class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Eliminar</button></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class = "text-center my-2">
+                        <button (click) = "anadirNuevoEjercicio()"  class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Añadir Ejercicio</button>
+                      </div>
+                </div>
+            </div>
+        </div>
+
+        <div class = "container">
+          <div class = "row">
+              <div class = "col my-5">
+                  <h3 class = "fw-bolder tipoLetra">Seccion de rutinas</h3>
+                  <hr class="d-inline-block "
+                  style="width:17rem; color:#6D0101;"/>
+                  <div class="table-wrapper-scroll-y my-custom-scrollbar text-center">
+                      <table class="table table-bordered table-striped mb-0">
+                        <thead>
+                          <tr class = "colorBack">
+                            <th scope="col">Nombre ejercicio</th>
+                            <th scope="col">Editar información</th>
+                            <th scope="col">Eliminar</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor = "let aux of rutinas" class = "colorBack2">
+                            <th scope="row">{{aux.titulorutina}}</th>
+                            <td><button (click) = "modificarRutina(aux.idrutinas)" class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom"c>Editar</button></td>
+                            <td><button (click) = "eliminarRutina(aux.idrutinas)"  class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Eliminar</button></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class = "text-center my-2">
+                      <button (click) = "anadirNuevaRut()"  class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Añadir Rutina</button>
+                    </div>
+              </div>
+          </div>
+      </div>
+    </ng-container>
+</body>
+<app-footer></app-footer>

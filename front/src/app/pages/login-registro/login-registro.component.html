@@ -1,0 +1,66 @@
+<div class="fotoBack">
+	<div class="container full d-flex justify-content-center align-items-center">
+		<div class="row justify-content-center">
+			<div class="col">
+				<div class="card">
+					<div class="card-top text-center mt-4">
+						<a [routerLink]="['']"><img src="../assets/img/nullEnRojo.png" height="55rem;"></a>
+					</div>
+					<div class="card-body p-4">
+						<div class="row d-flex justify-content-center align-items-center">
+							<div class="col">
+								<form [formGroup]="formularioLogin" (ngSubmit)="iniciarSesion()">
+									<label for="campoCorreoElectronico">Correo electronico</label>
+									<input type="email" class="form-input" id="campoCorreoElectronico"
+									       aria-describedby="emailHelp"
+									       placeholder="Ej: Sergio.a@correo.cl" formControlName="correo" (click) = "correoLlenadoT()">
+									<div *ngIf="formularioLogin.get('correo')?.touched && formularioLogin.get('correo')?.errors?.['required'] || correoLlenado == false"
+									     class="errorCualquiera" >Este campo es obligatorio
+									</div>
+									<div *ngIf="formularioLogin.get('correo')?.touched && formularioLogin.get('correo')?.errors?.['pattern']"
+									     class="errorCualquiera ">Este campo debe tener formato de correo
+									</div>
+									<label for="campoContraseña">Contraseña</label>
+									<input type="password" class="form-input" id="campoContraseña"
+									       placeholder="**********"
+									       formControlName="contraseña"(click) = "pass()">
+									<div *ngIf="formularioLogin.get('password')?.touched && formularioLogin.get('password')?.errors?.['required'] || passw == false "
+									     class="errorCualquiera	">Este campo es obligatorio
+									</div>
+
+									<div *ngIf="formularioLogin.get('password')?.touched && formularioLogin.get('password')?.errors?.['pattern']"
+									     class="errorCualquiera">La contraseña debe como minimo una letra, un numero y 6 caracteres
+									</div>
+									<div id="catpchaElemen">
+										<ngx-recaptcha2 #catpchaElemen
+										                [siteKey] = "siteKey"
+										                formControlName = "recaptcha"
+														(success) = "checkCaptcha()">
+										</ngx-recaptcha2>
+									</div>
+									<div *ngIf="buttonClicked == true && captchaResolved == false"
+									     class="errorCualquiera errorCualquieraA"> Se debe rellenar el Captcha.
+									</div>
+
+									<div class="text-center">
+										<button type="submit" class="btn btn-danger mt-3 ">Iniciar Sesion</button>
+									</div>
+								</form>
+							</div>
+						</div>
+						<hr class="my-2 d-inline-block mx-auto"
+						    style="width: 100%; background-color: #6D0000; height: 2px"/>
+						<div class="row">
+							<div class="col">
+								<div class="text-center revisarA">
+									<h5 class="mb-3">¿No estas registrado?</h5>
+									<a type="button" class="btn btn-danger buttona" [routerLink]="['/Registro']">Registrarse</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

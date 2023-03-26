@@ -1,0 +1,34 @@
+.tamaño-foto{
+    height: 25rem;
+    width: 50rem;
+}
+
+@media (max-width: 1200px) {
+    .tamaño-foto{
+        height: 20rem;
+        width: 40rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .tamaño-foto{
+        height: 20rem;
+        width: 30rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .tamaño-foto{
+        height: 15rem;
+        width: 20rem;
+    }
+}
+@media (max-width: 320px) {
+    .tamaño-foto{
+        height: 13rem;
+        width: 15rem;
+    }
+}
+.tamaño-letra{
+    font-size: 25px;
+}
