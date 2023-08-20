@@ -2,6 +2,26 @@ const { Pool } = require('pg');
 const multer = require('multer');
 const { json } = require('express');
 
+function middleware(req,res,next){
+    try {
+        const token = req.headers['token'];
+        const dotenv = require('dotenv').config({ path: 'pass.env' });
+        const secretKey = process.env.secretkey;
+        const jwt = require('jsonwebtoken');
+        jwt.verify(token, secretKey, (err, decoded) => {
+            if (err) {
+                console.log(err);
+                return res.status(401).send(false);
+            } else {
+              req.idusuario = decoded.data;
+              next();
+            }
+        });
+    } catch (error) {
+        res.send(false)
+    }
+}
+
 const pool = new Pool({
     host: 'localhost',
     user: 'postgres',
@@ -66,30 +86,42 @@ const guardarFotoEjercicio = async(req,res) =>{
 }
 
 const revisarCorreo =  async (req, res) => {
-    const correo = req.params.correo;
-    const response = await pool.query('select correo from usuarios where correo = $1',[correo]);
-    if(response.rows.length == 1){
-        pool.end;
-        res.send(true);
-    }else{
-        pool.end;
-        res.status(200).send(false); 
+    try {
+        const correo = req.params.correo;
+        const response = await pool.query('select correo from usuarios where correo = $1',[correo]);
+        if(response.rows.length == 1){
+            pool.end;
+            res.send(true);
+        }else{
+            pool.end;
+            res.status(200).send(false); 
+        }
+    } catch (error) {
+        return res.send(false)
     }
 }
 
 const obtenerEjerciciosPrivados = async(req,res) =>{
-    const id = req.params.id;
-    const response = await pool.query('select idejercicios from rutinas_ejercicios where idrutinas = $1',[id]);
-    pool.end;
-    return res.send(response.rows);
+    try {
+        const id = req.params.id;
+        const response = await pool.query('select idejercicios from rutinas_ejercicios where idrutinas = $1',[id]);
+        pool.end;
+        return res.send(response.rows);
+    } catch (error) {
+        return res.send(false);
+    }
 }
 
 const devolverRutinas = async (req, res) =>{
-    const id = req.params.id;
-    const response = await pool.query('select * from rutinas where idusuario = $1 ORDER BY idrutinas ASC',[id]);
-    pool.end;
-    let resultado = response.rows;
-    return res.json(resultado);
+    try {
+        let id = req.idusuario.idusuario;
+        const response = await pool.query('select * from rutinas where idusuario = $1 ORDER BY idrutinas ASC',[id]);
+        pool.end;
+        let resultado = response.rows;
+        return res.json(resultado);
+    } catch (error) {
+        return res.json(false);
+    }
 }
 
 const generarEjerciciosBasicos = async(idUsuario) =>{
@@ -108,11 +140,15 @@ const generarEjerciciosBasicos = async(idUsuario) =>{
 }
 
 const devolverRutinasEspecifica = async (req, res) =>{
-    const id = req.params.id;
-    const response = await pool.query('select * from rutinas where idrutinas = $1',[id]);
-    pool.end;
-    let resultado = response.rows;
-    return res.json(resultado);
+    try {
+        const id = req.params.id;
+        const response = await pool.query('select * from rutinas where idrutinas = $1',[id]);
+        pool.end;
+        let resultado = response.rows;
+        return res.json(resultado);
+    } catch (error) {
+        return res.send(false);
+    }
 }
 
 const crearRutinas = async (idUsuario) =>{
@@ -129,83 +165,102 @@ const crearRutinas = async (idUsuario) =>{
 
 
 const registrarUsuario = async (req, res) => {
-    const { nombre, nombreUsuario, edad, correo, contraseña} = req.body;
-    const bcrypt = require('bcrypt');
-    const saltRounds = 10;
-    let auxContraseña =  bcrypt.hashSync(contraseña, saltRounds, (err, hash) => {
-        if (err) throw (err)
-        contraseña = hash;
-    });
-    let fotoOriginal = "../../../assets/img/usuario.png";
-    let con = await pool.query('INSERT INTO usuarios (tipousuario, correo, contraseña, nombreusuario, edad, nombre, foto) VALUES ($1, $2, $3, $4, $5, $6, $7)', [1,correo,auxContraseña,nombreUsuario,edad,nombre, fotoOriginal]);
-    let obtenerId = await pool.query('select idusuario from usuarios where correo = $1',[correo]);
-    crearRutinas(obtenerId.rows[0]);
-    if(!con){
-        pool.end;
-        res.status(200).send(false);
-    }else{
-        pool.end;
-        res.status(200).send(true);
+    try {
+        const { nombre, nombreUsuario, edad, correo, contraseña} = req.body;
+        const bcrypt = require('bcrypt');
+        const saltRounds = 10;
+        let auxContraseña =  bcrypt.hashSync(contraseña, saltRounds, (err, hash) => {
+            if (err) throw (err)
+            contraseña = hash;
+        });
+        let fotoOriginal = "../../../assets/img/usuario.png";
+        let con = await pool.query('INSERT INTO usuarios (tipousuario, correo, contraseña, nombreusuario, edad, nombre, foto) VALUES ($1, $2, $3, $4, $5, $6, $7)', [1,correo,auxContraseña,nombreUsuario,edad,nombre, fotoOriginal]);
+        let obtenerId = await pool.query('select idusuario from usuarios where correo = $1',[correo]);
+        crearRutinas(obtenerId.rows[0]);
+        if(!con){
+            pool.end;
+            res.status(200).send(false);
+        }else{
+            pool.end;
+            res.status(200).send(true);
+        }
+    } catch (error) {
+        return res.send(false)
     }
 }
 
 const loginUsuario = async (req,res) => {
-    let flagAdmin = 0;
-    const {correo,contraseña} = req.body;
-    const response = await pool.query('select idusuario,contraseña,tipousuario from usuarios where correo = $1',[correo]);
-    const bcrypt = require('bcrypt');
-    const jwt = require('jsonwebtoken');
-    if(response.rows[0].tipousuario == '2' && contraseña == response.rows[0].contraseña){
-        flagAdmin = 1;
-    }
-    if((response.rows.length != 0 && bcrypt.compareSync(contraseña, response.rows[0].contraseña)) || flagAdmin == 1){
-            let resultado = response.rows[0];
-            delete resultado.password;
-            let token = jwt.sign({
-                data: resultado
-            }, 'secret', { expiresIn: 60 * 60 * 24}) // Expira en 1 día
+    try {
+        let flagAdmin = 0;
+        const {correo,contraseña} = req.body;
+        const response = await pool.query('select idusuario,contraseña,tipousuario from usuarios where correo = $1',[correo]);
+        const bcrypt = require('bcrypt');
+        const jwt = require('jsonwebtoken');
+        if(response.rows[0].tipousuario == '2' && contraseña == response.rows[0].contraseña){
+            flagAdmin = 1;
+        }
+        if((response.rows.length != 0 && bcrypt.compareSync(contraseña, response.rows[0].contraseña)) || flagAdmin == 1){
+                let resultado = response.rows[0];
+                delete resultado.password;
+                let token = jwt.sign({
+                    data: resultado
+                }, 'secret', { expiresIn: 60 * 60 * 24}) // Expira en 1 día
+                pool.end;
+                return res.json({
+                    token,
+                    valor: true
+                })
+        }else{
             pool.end;
-            return res.json({
-                token,
-                valor: true
-            })
-    }else{
-        pool.end;
-        res.status(400).send(false);
+            res.status(400).send(false);
+        }
+    } catch (error) {
+        return res.send(false);
     }
 }
 
 const modificarDatos =  async (req, res) => {
-    const {idusuario, edad, peso, nacionalidad, contextura, objetivo, cantidad_ejercicio} = req.body;
-    
-    const response = await pool.query('UPDATE usuarios SET edad = $2,peso = $3, nacionalidad = $4, contextura = $5, objetivo = $6, cantidad_ejercicio = $7 WHERE idusuario = $1',[idusuario, edad, peso, nacionalidad, contextura, objetivo, cantidad_ejercicio])
-    pool.end;
-    if(response){
-        res.status(200).send(true);
+    try {
+        const {idusuario, edad, peso, nacionalidad, contextura, objetivo, cantidad_ejercicio} = req.body;
+        const response = await pool.query('UPDATE usuarios SET edad = $2,peso = $3, nacionalidad = $4, contextura = $5, objetivo = $6, cantidad_ejercicio = $7 WHERE idusuario = $1',[idusuario, edad, peso, nacionalidad, contextura, objetivo, cantidad_ejercicio])
+        pool.end;
+        if(response){
+            res.status(200).send(true);
+        }
+    } catch (error) {
+        
     }
 }
 
 const devolverDatos =  async (req, res) => {
-    const id = req.params.id;
-    const response = await pool.query('select idusuario, nombreusuario, nombre, edad, peso, nacionalidad, contextura, objetivo, cantidad_ejercicio, foto from usuarios where idusuario = $1',[id]);
-    pool.end;
-    let resultado = response.rows[0];
-    return res.json(resultado);
+    try {
+        let id = req.idusuario.idusuario;
+        const response = await pool.query('select idusuario, nombreusuario, nombre, edad, peso, nacionalidad, contextura, objetivo, cantidad_ejercicio, foto from usuarios where idusuario = $1',[id]);
+        pool.end;
+        let resultado = response.rows[0];
+        return res.json(resultado);
+    } catch (error) {
+        return res.send(error);
+    }
 }
 
 const obtenerEjerciciosTotales = async (req, res) =>{
-    let ejercicios = await pool.query('select * from ejercicios ORDER BY idejercicio ASC');
-    for(i = 0; i < ejercicios.rows.length; i++){
-        let idMusculos = await pool.query('select idmusculo from ejercicios_musculos where idejercicio = $1',[ejercicios.rows[i]["idejercicio"]]);
-        let arregloMusculos = [];
-        for(j = 0; j < idMusculos.rows.length; j++){
-            let musculo = await pool.query('select musculo from musculos where idmusculo = $1',[idMusculos.rows[j]["idmusculo"]]);
-            arregloMusculos.push(musculo.rows[0]["musculo"]);
+    try {
+        let ejercicios = await pool.query('select * from ejercicios ORDER BY idejercicio ASC');
+        for(i = 0; i < ejercicios.rows.length; i++){
+            let idMusculos = await pool.query('select idmusculo from ejercicios_musculos where idejercicio = $1',[ejercicios.rows[i]["idejercicio"]]);
+            let arregloMusculos = [];
+            for(j = 0; j < idMusculos.rows.length; j++){
+                let musculo = await pool.query('select musculo from musculos where idmusculo = $1',[idMusculos.rows[j]["idmusculo"]]);
+                arregloMusculos.push(musculo.rows[0]["musculo"]);
+            }
+            ejercicios.rows[i]["musculos"] = arregloMusculos;
         }
-        ejercicios.rows[i]["musculos"] = arregloMusculos;
+        pool.end;
+        res.json(ejercicios.rows);
+    } catch (error) {
+        return res.send(false)
     }
-    pool.end;
-    res.json(ejercicios.rows);
 }
 
 const eliminarEjercicioDeRutina = async(req,res) =>{
@@ -243,11 +298,15 @@ const editarInfoRutinaPriv = async(req,res) =>{
 }
 
 const devolverCoincidencias = async(req,res) => {
-    let coincidencia = req.params.coincidencia;
-    coincidencia = coincidencia.toLowerCase();
-    let coincidendia = "%" + coincidencia + "%"
-    const response = await pool.query('select distinct ejercicios.tituloejercicio, ejercicios.idejercicio from ejercicios left join ejercicios_musculos on ejercicios_musculos.idejercicio = ejercicios.idejercicio left join musculos on ejercicios_musculos.idmusculo = musculos.idmusculo where LOWER(ejercicios.tituloejercicio) like $1 or LOWER(ejercicios.descripcion) like $1 or LOWER(musculos.musculo) like $1;',[coincidendia]);
-    return res.json(response.rows);
+    try {
+        let coincidencia = req.params.coincidencia;
+        coincidencia = coincidencia.toLowerCase();
+        let coincidendia = "%" + coincidencia + "%"
+        const response = await pool.query('select distinct ejercicios.tituloejercicio, ejercicios.idejercicio from ejercicios left join ejercicios_musculos on ejercicios_musculos.idejercicio = ejercicios.idejercicio left join musculos on ejercicios_musculos.idmusculo = musculos.idmusculo where LOWER(ejercicios.tituloejercicio) like $1 or LOWER(ejercicios.descripcion) like $1 or LOWER(musculos.musculo) like $1;',[coincidendia]);
+        return res.json(response.rows);
+    } catch (error) {
+        return res.send(false)
+    }
 }
 
 const eliminarEjercicioPublico = async(req,res) =>{
@@ -267,8 +326,12 @@ const eliminarRutinasPub = async(req,res) =>{
 }
 
 const obtenerMusculosTotales = async(req,res) =>{
-    let musculos = await pool.query('select * from musculos');
-    return res.status(200).send(musculos.rows);
+    try {
+        let musculos = await pool.query('select * from musculos');
+        return res.status(200).send(musculos.rows);
+    } catch (error) {
+        return res.send(false);
+    }
 }
 
 const editarEjercicioPublico = async(req,res) =>{
@@ -314,8 +377,12 @@ const guardarNuevaRutinaPub = async(req,res) =>{
 }
 
 const devolverRutinasPublicas = async(req,res) =>{
-    let response = await pool.query('select idrutinas,titulorutina,foto,descripcion from rutinas where idusuario ISNULL ORDER BY idrutinas ASC');
-    return res.status(200).json(response.rows);
+    try {
+        let response = await pool.query('select idrutinas,titulorutina,foto,descripcion from rutinas where idusuario ISNULL ORDER BY idrutinas ASC');
+        return res.status(200).json(response.rows);
+    } catch (error) {
+        return res.send(false);
+    }
 }
 
 const modificarRutinas = async(req,res) =>{
@@ -354,5 +421,6 @@ module.exports = {
     modificarRutinas,
     guardarFotoRutinaPub,
     eliminarRutinasPub,
-    guardarNuevaRutinaPub
+    guardarNuevaRutinaPub,
+    middleware
 }

@@ -412,11 +412,11 @@ export class MiPerfilComponent implements OnInit {
         let objetivoUsuario = document.getElementById(objetivo!)!.textContent
         
         if(edadUsuario < 16 || edadUsuario > 99){
-          Swal.showValidationMessage(`Porfavor ingresa una edad valida`);
+          Swal.showValidationMessage(`Porfavor ingresa una edad valida entre 16 y 99 años`);
         }
         else if(pesoUsuario < 40 || pesoUsuario > 300 )
         {
-          Swal.showValidationMessage(`Porfavor ingresa un peso valido`);
+          Swal.showValidationMessage(`Porfavor ingresa un peso valido entre 40 y 300 kg`);
         }
         else if(nacionalidad == "pret"){
           Swal.showValidationMessage(`Porfavor eliga una nacionalidad valida`);
@@ -426,7 +426,7 @@ export class MiPerfilComponent implements OnInit {
         }else if(objetivo == "preter"){
           Swal.showValidationMessage(`Porfavor eliga un objetivo valida`);
         }else if(cantidadUsuario < 0 || cantidadUsuario > 7 || cantidad == ''){
-          Swal.showValidationMessage(`Porfavor ingresa una cantidad de ejercicio valida`);
+          Swal.showValidationMessage(`Porfavor ingresa una cantidad de ejercicio valida entre 0 a 7 semanal`);
         }else{
           let datosUsuario: datosModificables  = {
             idusuario: this.estado.idUsuario,
