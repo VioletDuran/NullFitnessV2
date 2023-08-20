@@ -7,10 +7,16 @@ import {HttpClient,HttpHeaders} from "@angular/common/http";
 })
 export class AdministradorService {
   urlHttp:string = 'http://localhost:3000/users';
+
+  private HttpOptions = {
+		headers: new HttpHeaders({
+			token: localStorage.getItem('token') || '',
+		}),
+	};
   constructor(private httpClient:HttpClient) { }
   
   cargarDatos(idusuario:string): Observable<any> {
-    return this.httpClient.get(this.urlHttp+'/devolverDatos'+`/${idusuario}`)
+    return this.httpClient.get(this.urlHttp+'/devolverDatos',this.HttpOptions)
   }
 
   devolverEjercicios(): Observable<any>{
@@ -20,7 +26,8 @@ export class AdministradorService {
   eliminarEjercicioPublico(idejercicio:any){
     let Options = {
       headers: new HttpHeaders({
-        'Conten.type': 'application/json'
+        'Conten.type': 'application/json',
+        token: localStorage.getItem('token') || ''
       }),
       body:idejercicio
     }
@@ -32,19 +39,19 @@ export class AdministradorService {
   }
 
   modificarEjerciciosPublicos(datos:any): Observable<any>{
-    return this.httpClient.put(this.urlHttp + "/modificarEjercicioPublico",datos);
+    return this.httpClient.put(this.urlHttp + "/modificarEjercicioPublico",datos,this.HttpOptions);
   }
 
   guardarFotoEjercicio(datoImagen:any): Observable<any> {
-    return this.httpClient.post(this.urlHttp+'/guardarFotoEjercicio?carpeta=ejerciciosPublico',datoImagen);
+    return this.httpClient.post(this.urlHttp+'/guardarFotoEjercicio?carpeta=ejerciciosPublico',datoImagen,this.HttpOptions);
   }
 
   guardarNuevoEjercicio(datos:any): Observable<any> {
-    return this.httpClient.post(this.urlHttp+'/guardarNuevoEjercicio',datos);
+    return this.httpClient.post(this.urlHttp+'/guardarNuevoEjercicio',datos,this.HttpOptions);
   }
 
   guardarNuevaRutinaPub(datos:any): Observable<any> {
-    return this.httpClient.post(this.urlHttp+'/guardarNuevaRutinaPub',datos);
+    return this.httpClient.post(this.urlHttp+'/guardarNuevaRutinaPub',datos,this.HttpOptions);
   }
 
   devolverRutinasPublicas(): Observable<any>{
@@ -52,17 +59,18 @@ export class AdministradorService {
   }
 
   modificarRutinas(datos:any): Observable<any>{
-    return this.httpClient.put(this.urlHttp + '/modificarRutinas',datos);
+    return this.httpClient.put(this.urlHttp + '/modificarRutinas',datos,this.HttpOptions);
   }
 
   guardarFotoRutina(datoImagen:any): Observable<any> {
-    return this.httpClient.post(this.urlHttp+'/guardarFotoRutinaPub?carpeta=rutinasPublicas',datoImagen);
+    return this.httpClient.post(this.urlHttp+'/guardarFotoRutinaPub?carpeta=rutinasPublicas',datoImagen,this.HttpOptions);
   }
 
   eliminarRutinaPub(idrutinas:any){
     let Options = {
       headers: new HttpHeaders({
-        'Conten.type': 'application/json'
+        'Conten.type': 'application/json',
+        token: localStorage.getItem('token') || ''
       }),
       body:idrutinas
     }
