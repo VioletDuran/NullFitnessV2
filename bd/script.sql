@@ -195,8 +195,7 @@ CREATE TABLE IF NOT EXISTS ejercicios_musculos (
 /* SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS; */
 /* SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS; */
 
---Hola
-
---Holaaa
-
---holaaaa
+ALTER TABLE rutinas_ejercicios
+ADD COLUMN series VARCHAR,
+ADD COLUMN repeticiones VARCHAR,
+ADD COLUMN tiempo VARCHAR;

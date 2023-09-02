@@ -277,15 +277,31 @@ const eliminarEjercicioDeRutina = async(req,res) =>{
     }
 }
 
+
+const revisarEjercicioRutina = async(req,res) =>{
+        console.log(req.body);
+        try {
+            const {idrutinas,idejercicios} = req.body;
+            const response1 = await pool.query('select idejercicios from rutinas_ejercicios where idrutinas = $1 and idejercicios = $2',[idrutinas,idejercicios])
+            if(response1.rows.length == 1){
+                return res.status(200).send(false);
+            }else{
+                return res.status(200).send(true);
+            }
+        } catch (error) {
+            
+        }
+}
+
 const anadirEjercicio = async(req,res) =>{
-    const {idrutinas,idejercicios} = req.body;
-    const response1 = await pool.query('select idejercicios from rutinas_ejercicios where idrutinas = $1 and idejercicios = $2',[idrutinas,idejercicios])
-    if(response1.rows.length == 1){
-        return res.status(200).send(false);
-    }
-    const response = await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[idrutinas,idejercicios]);
-    if(response){
-        return res.status(200).send(true);
+    try {
+        const {idrutinas,idejercicios,series,repeticiones} = req.body;
+        const response = await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios, series, repeticiones) VALUES ($1,$2,$3,$4)',[idrutinas,idejercicios,series,repeticiones]);
+        if(response){
+            return res.status(200).send(true);
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -395,6 +411,19 @@ const modificarRutinas = async(req,res) =>{
     res.send(true);
 }
 
+const obtenerEjerciciosPrivadoUsuario = async (req,res) => {
+    try {
+        const id = req.params.id;
+        const response = await pool.query('select idejercicios,series,repeticiones,tiempo from rutinas_ejercicios where idrutinas = $1',[id]);
+        console.log(response.rows);
+        pool.end;
+        return res.send(response.rows);
+    } catch (error) {
+        console.log(error);
+        return res.send(false);
+    }
+}
+
 module.exports = {
     revisarCorreo,
     registrarUsuario,
@@ -422,5 +451,7 @@ module.exports = {
     guardarFotoRutinaPub,
     eliminarRutinasPub,
     guardarNuevaRutinaPub,
-    middleware
+    middleware,
+    revisarEjercicioRutina,
+    obtenerEjerciciosPrivadoUsuario
 }

@@ -21,6 +21,15 @@
         <div class = "row text-center">
             <div class = "col-lg-4 col-md-6 col-sm-6 my-4" *ngFor="let aux of ejerciciosUsuario">
                 <h4 class = "fw-bolder">{{aux.tituloejercicio}}</h4>
+                <ng-container *ngIf = "aux.series != null">
+                    <h5 class = "fw-bolder">Cantidad de series: {{aux.series}}</h5>
+                </ng-container>
+                <ng-container *ngIf = "aux.repeticiones != null">
+                    <h5 class = "fw-bolder">Cantidad de repeticiones: {{aux.repeticiones}}</h5>
+                </ng-container>
+                <ng-container *ngIf = "aux.tiempo != null">
+                    <h5 class = "fw-bolder">Tiempo: {{aux.tiempo}}</h5>
+                </ng-container>
                 <a [routerLink] = "['/Ejercicio',aux.idejercicio]"><img class = "tamaño-fotos rounded" [src]="aux.foto" alt="Foto Referencia Abdominal"></a>
 	            <div class = "row-fluid text-center">
 		            <button (click)="eliminarEjercicio(aux.idejercicio, rutinaActual.idrutinas)" class="btn mt-2 btn-danger rounded-pill text-uppercase fw-bolder text-custom">Eliminar Ejercicio</button>

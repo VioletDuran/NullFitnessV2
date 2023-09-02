@@ -15,6 +15,7 @@ INSERT INTO musculos(musculo) VALUES('Gemelos');--6
 INSERT INTO musculos(musculo) VALUES('Trapecios');--7
 INSERT INTO musculos(musculo) VALUES('Dorsales');--8
 INSERT INTO musculos(musculo) VALUES('Cuadriceps');--9
+INSERT INTO musculos(musculo) VALUES('Cardiovascular');--10
 
 --Ejercicios
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Press de banca','Press de banca','../../../assets/img/press-banca-1.jpg', 'El press de banca es un ejercicio multiarticular que, lógicamente, no sólo implica a la musculatura pectoral. Por tanto, debemos de tener en cuenta cada uno de los músculos implicados en está acción para poder progresar en este ejercicio. Es uno de los mejores para trabajar el pecho.','https://www.youtube.com/embed/GeLq8cMODLc');

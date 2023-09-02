@@ -15,7 +15,7 @@ import { ServicioLoginService } from 'src/app/services/Login/servicio-login.serv
 })
 export class MisEjerciciosComponent implements OnInit {
 
-  idEjerciciosUsuario: string[] = [];
+  idEjerciciosUsuario: any = [];
   ejerciciosUsuario : EjerciciosPublicosAux[] = [];
   ejerciciosTotales : EjerciciosPublicosAux[] = [];
   rutinaActual?: Rutina | any ;
@@ -37,16 +37,21 @@ export class MisEjerciciosComponent implements OnInit {
     }
     forkJoin(
       [this.ejerciciosPriv.devolverRutinasEspecifica(this._route.snapshot.paramMap.get('id')),
-      this.ejerciciosPriv.obtenerEjerciciosTotales(),this.ejerciciosPriv.obtenerEjerciciosPrivados(this._route.snapshot.paramMap.get('id'))]
+      this.ejerciciosPriv.obtenerEjerciciosTotales(),this.ejerciciosPriv.obtenerEjerciciosPrivadoUsuario(this._route.snapshot.paramMap.get('id'))]
     ).subscribe(([valor1,valor2,valor3]) => {
       this.rutinaActual = valor1[0];
       this.ejerciciosTotales = valor2;
       this.idEjerciciosUsuario = valor3;
       for(let aux in this.idEjerciciosUsuario){
         let auxA = Object.values(this.idEjerciciosUsuario[aux]);
-        this.ejerciciosUsuario.push(this.ejerciciosTotales.find(ejercicio => String(ejercicio.idejercicio) === String(auxA))!);
+        this.ejerciciosUsuario.push(this.ejerciciosTotales.find(ejercicio => String(ejercicio.idejercicio) === String(auxA[0]))!);
       }
-
+      for (let i = 0; i < this.ejerciciosUsuario.length; i++) {
+        this.ejerciciosUsuario[i].series = this.idEjerciciosUsuario[i].series;
+        this.ejerciciosUsuario[i].repeticiones = this.idEjerciciosUsuario[i].repeticiones;
+        this.ejerciciosUsuario[i].tiempo = this.idEjerciciosUsuario[i].tiempo;
+      }
+      console.log(this.ejerciciosUsuario)
       this.datosCargados = true;
     })
   }
