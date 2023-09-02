@@ -449,7 +449,6 @@ export class MiPerfilComponent implements OnInit {
                   preConfirm: () => {
                      location.reload();
                   }
-
                 })
             }
           })

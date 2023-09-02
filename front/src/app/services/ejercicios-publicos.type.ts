@@ -6,4 +6,7 @@ export interface EjerciciosPublicosAux {
     descripcion:String;
     musculos:String[];
     video:string;
+    series:string;
+    repeticiones:string;
+    tiempo:string;
 }

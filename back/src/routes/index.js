@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const {revisarCorreo,registrarUsuario,loginUsuario,modificarDatos,devolverDatos,guardarFoto,upload,devolverRutinas, obtenerEjerciciosPrivados,obtenerEjerciciosTotales, devolverRutinasEspecifica,eliminarEjercicioDeRutina,anadirEjercicio,editarInfoRutinaPriv,guardarFotoRutina,devolverCoincidencias,eliminarEjercicioPublico,obtenerMusculosTotales,editarEjercicioPublico,guardarFotoEjercicio,guardarNuevoEjercicio,devolverRutinasPublicas,modificarRutinas,guardarFotoRutinaPub,eliminarRutinasPub,guardarNuevaRutinaPub,middleware} = require('../controllers/index.controller');
+const {revisarCorreo,registrarUsuario,loginUsuario,modificarDatos,devolverDatos,guardarFoto,upload,devolverRutinas, obtenerEjerciciosPrivados,obtenerEjerciciosTotales, devolverRutinasEspecifica,eliminarEjercicioDeRutina,anadirEjercicio,editarInfoRutinaPriv,guardarFotoRutina,devolverCoincidencias,eliminarEjercicioPublico,obtenerMusculosTotales,editarEjercicioPublico,guardarFotoEjercicio,guardarNuevoEjercicio,devolverRutinasPublicas,modificarRutinas,guardarFotoRutinaPub,eliminarRutinasPub,guardarNuevaRutinaPub,middleware,revisarEjercicioRutina,obtenerEjerciciosPrivadoUsuario} = require('../controllers/index.controller');
 
 //Gets
 router.get('/users/devolverDatos',middleware,devolverDatos);
@@ -12,6 +12,7 @@ router.get('/users/obtenerEjerciciosTotales/:id',obtenerEjerciciosTotales);
 router.get('/users/devolverCoincidencias/:coincidencia',devolverCoincidencias);
 router.get('/users/obtenerMusculosTotales/:id',obtenerMusculosTotales);
 router.get('/users/devolverRutinasPublicas/:id',devolverRutinasPublicas);
+router.get('/users/obtenerEjerciciosPrivadoUsuario/:id',obtenerEjerciciosPrivadoUsuario);
 
 //Posts
 router.post('/users/registro', registrarUsuario);
@@ -25,6 +26,7 @@ router.post('/users/guardarFotoEjercicio',middleware,upload.single("myFile"),gua
 router.post('/users/guardarFotoRutinaPub',middleware,upload.single("myFile"),guardarFotoRutinaPub);
 router.post('/users/guardarNuevoEjercicio',middleware,guardarNuevoEjercicio);
 router.post('/users/guardarNuevaRutinaPub',middleware,guardarNuevaRutinaPub);
+router.post('/users/revisarEjercicioRutina',middleware,revisarEjercicioRutina);
 
 
 //Puts

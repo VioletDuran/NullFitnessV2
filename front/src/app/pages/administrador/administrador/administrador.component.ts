@@ -69,6 +69,7 @@ export class AdministradorComponent implements OnInit {
       
     })
     this.servicio.devolverRutinasPublicas().subscribe((valor)=>{
+      console.log(valor)
       this.rutinas = valor;
       this.datosCargados = true;
     })
