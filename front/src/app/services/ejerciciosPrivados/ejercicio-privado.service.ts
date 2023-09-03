@@ -21,7 +21,6 @@ export class EjercicioPrivadoService {
   }
 
   obtenerEjerciciosPrivadoUsuario(idRutina:any): Observable<any>{
-    console.log("hola");
     let url = '/obtenerEjerciciosPrivadoUsuario/' + idRutina;
     return this.httpClient.get("http://localhost:3000/users" + url,this.HttpOptions);
   }
@@ -57,6 +56,22 @@ export class EjercicioPrivadoService {
   
   editarInfoRutinaPriv(informacion:any): Observable<any>{
     return this.httpClient.put('http://localhost:3000/users/editarInfoRutinaPriv',informacion,this.HttpOptions);
+  }
+
+  esCardio(id:any): Observable<any>{
+    return this.httpClient.get('http://localhost:3000/users/esCardio/' + id,this.HttpOptions);
+  }
+
+  añadirEjercicioCardio(datos:any): Observable<any>{
+    return this.httpClient.post('http://localhost:3000/users/anadirEjercicioCardio',datos,this.HttpOptions);
+  }
+
+  modificarTiempo(datos:any): Observable<any>{
+    return this.httpClient.put('http://localhost:3000/users/modificarTiempo',datos,this.HttpOptions);
+  }
+
+  modificarCarga(datos:any): Observable<any>{
+    return this.httpClient.put('http://localhost:3000/users/modificarCarga',datos,this.HttpOptions);
   }
 
 }

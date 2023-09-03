@@ -38,14 +38,13 @@ INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VA
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Press de banca inclinado','Press de banca inclinado','../../../assets/img/press-inclinado-barra.png','El press inclinado se enfoca en la parte superior del pecho, mayormente en la parte de arriba del pectoral mayor.','https://www.youtube.com/embed/swMjJqFzxCQ');
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Dominadas','Dominadas','../../../assets/img/dominada.jpg','Las dominadas se tratan de un ejercicio de gimnasia deportiva y es uno de los ejercicios más potentes a la hora de desarrollar la espalda. No solamente requiere de mucha fuerza, sino que al progresar aumentará la fuerza y el rendimiento deportivo.','https://www.youtube.com/embed/KFxrkDpRnFM');
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Polea al pecho','Polea al pecho','../../../assets/img/polea.jpg','La polea al pecho es un ejercicio que sirve para trabajar la musculatura de la espalda. Debe realizarse con la ayuda de la maquinaria adecuada, en este caso una polea elevada la cual cuenta con un asiento en el que poder mantener la posición y mover todo el peso que deseemos y podamos. Es un ejercicio ideal para aquellos que acaban de iniciarse en los entrenamientos de musculación o de tonificación, ya que permite realizar los movimientos con total seguridad y con un bajo riesgo de lesión.','https://www.youtube.com/embed/ZbVIYoshBd8');
-
-
-
-
-
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Remo en polea baja','Remo en polea baja','../../../assets/img/remoa.jpg','Es un ejercicio ideal para el desarrollo de la espalda, pues solicita principalmente el dorsal ancho, el redondo mayor, el haz posterior del deltoides y durante el final del movimiento, el romboide y el trapecio.','https://www.youtube.com/embed/R2ZjMO4YEMA');
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Prensa de piernas','Prensa de piernas','../../../assets/img/pren.jpg','La prensa de piernas es un ejercicio compuesto para las piernas, que se centra en los cuádriceps. Dependiendo del ángulo de los pies y de lo abiertos o cerrados que los coloques en la plataforma, también se puede aumentar la implicación de los isquiotibiales y los glúteos.','https://www.youtube.com/embed/D1FvjYNX9QI');
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Extensión de rodillas en máquina','Extensión de rodillas en máquina','../../../assets/img/extension-de-piernas-en-maquina-init-pos-7748.png','La extensión de la rodilla es un ejercicio que puede realizarse con una máquina de pesas para trabajar el músculo que se encuentra en la parte delantera del muslo. La extensión de las rodillas trabaja específicamente el músculo cuádriceps.','https://www.youtube.com/embed/qnx1ZhzCKnI');
+INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Cardio en bicicleta estatica','Cardio en bicicleta estatica','../../../assets/img/man-on-stationary-bike.jpg','Usar la bicicleta estática es optar por un ejercicio de cardio que fortalece tu corazón, tus pulmones y tus músculos, y mejora el flujo sanguíneo. Se traduce en beneficios como la mejora de la memoria y la función cerebral, la bajada de presión sanguínea, mayor calidad de sueño, mejora de los niveles de azúcar en sangre, un sistema inmune más fuerte, menos estrés, más energía y mejor humor.','https://www.youtube.com/embed/j1z-kVbdqfk?si=T07Fv2M6rm8oiocl');
+INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Cardio en cinta','Cardio en cinta','../../../assets/img/CardioCinta.jpg','Ejercitar en una cinta de correr es una excelente manera de hacer ejercicio cardiovascular, y puede adaptarse a cualquier nivel de fitness.','https://www.youtube.com/embed/JE3w809VwO8?si=-sB_R66Rhxme4Ltc');
+
+
 
 -- Musculos
 INSERT INTO ejercicios_musculos(idejercicio, idmusculo) VALUES ('1','3');
@@ -108,6 +107,10 @@ INSERT INTO ejercicios_musculos(idejercicio, idmusculo) VALUES ('22','9');
 INSERT INTO ejercicios_musculos(idejercicio, idmusculo) VALUES ('22','5');
 
 INSERT INTO ejercicios_musculos(idejercicio, idmusculo) VALUES ('23','9');
+
+INSERT INTO ejercicios_musculos(idejercicio, idmusculo) VALUES ('24','10');
+
+INSERT INTO ejercicios_musculos(idejercicio, idmusculo) VALUES ('25','10');
 
 
 -- Rutinas

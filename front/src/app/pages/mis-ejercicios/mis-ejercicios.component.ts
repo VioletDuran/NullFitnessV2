@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import {Router} from "@angular/router";
 import { ServicioLoginService } from 'src/app/services/Login/servicio-login.service';
 
+
 @Component({
   selector: 'app-mis-ejercicios',
   templateUrl: './mis-ejercicios.component.html',
@@ -109,5 +110,79 @@ export class MisEjerciciosComponent implements OnInit {
       }
     })
   }
+
+  modificarCarga(idEjercicio:string , idRutina:string){
+    this.ejerciciosPriv.esCardio(idEjercicio).subscribe((valor: Array<any>) =>{
+      const existe = valor.some(valor => valor.idmusculo === 10);
+      if(existe){
+        Swal.fire({
+          title: '¿Cuanto tiempo en minutos?',
+          html: `<input type="number" class="swal2-input" placeholder="Minutos" id="tiempo">`,
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: 'green',
+          preConfirm: () =>{
+            const tiempo = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#tiempo'))?.value;
+            let tiempoEjer = Number(tiempo);
+            if(tiempoEjer < 1 || tiempoEjer > 180){
+              Swal.showValidationMessage(`Porfavor ingresa un tiempo valido entre 1 y 180`);
+            }else{
+              this.ejerciciosPriv.modificarTiempo({ idrutinas: idRutina, idejercicios: String(idEjercicio), tiempo: tiempoEjer}).subscribe((valor) => {
+                if(valor){
+                  Swal.fire({
+                    title: 'Se modifico correctamente!',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar',
+                    confirmButtonColor: 'green',
+                    preConfirm: () => {
+                      location.reload();
+                    }
+                  })
+                }
+              }) 
+            }
+          }
+        })
+        }else{
+              Swal.fire({
+              title: '¿Cuantas series y repeticiones?',
+              html:`<input type="number" class="swal2-input" placeholder="Series" id="series">
+                    <hr>
+                    <input type="number" class="swal2-input" placeholder="Repeticiones" id = "repeticiones">
+                    <hr>`,
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: 'green',   
+              preConfirm: () =>{
+                const series = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#series'))?.value;
+                let seriesEjercicio = Number(series);
+
+                const repes = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#repeticiones'))?.value;
+                let repesEjercicio = Number(repes);
+
+                if(seriesEjercicio < 1 || seriesEjercicio > 99){
+                  Swal.showValidationMessage(`Porfavor ingresa series valida entre 1 y 99`);
+                }
+                else if(repesEjercicio < 1 || repesEjercicio > 99){
+                  Swal.showValidationMessage(`Porfavor ingresa repeticiones validas entre 1 y 99`);
+                }else{
+                  this.ejerciciosPriv.modificarCarga({ idrutinas: idRutina, idejercicios: String(idEjercicio), series: series , repeticiones: repes}).subscribe((valor) => {
+                    if(valor){
+                      Swal.fire({
+                        title: 'Se modifico correctamente!',
+                        icon: 'success',
+                        confirmButtonText: 'Aceptar',
+                        confirmButtonColor: 'green',
+                        preConfirm: () => {
+                          location.reload();
+                        }
+                      })
+                    }
+                  }) 
+                }
+              }   
+            })
+        }
+    })
+  }
+
 
 }
