@@ -414,13 +414,59 @@ const modificarRutinas = async(req,res) =>{
 const obtenerEjerciciosPrivadoUsuario = async (req,res) => {
     try {
         const id = req.params.id;
-        const response = await pool.query('select idejercicios,series,repeticiones,tiempo from rutinas_ejercicios where idrutinas = $1',[id]);
-        console.log(response.rows);
+        const response = await pool.query('select idejercicios,series,repeticiones,tiempo from rutinas_ejercicios where idrutinas = $1 order by idejercicios',[id]);
         pool.end;
         return res.send(response.rows);
     } catch (error) {
-        console.log(error);
         return res.send(false);
+    }
+}
+
+const esCardio = async(req,res) =>{
+    try {
+        const id = req.params.id;
+        const response = await pool.query('select idmusculo from ejercicios_musculos where idejercicio = $1;',[id]);
+        pool.end;
+        return res.send(response.rows);
+    } catch (error) {
+        return res.send(false);
+    }
+}
+
+const anadirEjercicioCardio = async(req,res) =>{
+    try {
+        const {idrutinas,idejercicios,tiempo} = req.body;
+        const response = await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios, tiempo) VALUES ($1,$2,$3)',[idrutinas,idejercicios,tiempo]);
+        if(response){
+            return res.status(200).send(true);
+        }
+        console.log("HOLA");
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const modificarTiempo = async(req,res) =>{
+    try {
+        const {idrutinas,idejercicios,tiempo} = req.body;
+        const response = await pool.query('UPDATE rutinas_ejercicios SET tiempo = $3 where idrutinas = $1 and idejercicios = $2',[idrutinas,idejercicios,tiempo]);
+        if(response){
+            return res.status(200).send(true);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const modificarCarga = async(req,res) =>{
+    try {
+        const {idrutinas,idejercicios,series,repeticiones} = req.body;
+        const response = await pool.query('UPDATE rutinas_ejercicios SET series = $3, repeticiones = $4 where idrutinas = $1 and idejercicios = $2',[idrutinas,idejercicios,series,repeticiones]);
+        if(response){
+            return res.status(200).send(true);
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -453,5 +499,9 @@ module.exports = {
     guardarNuevaRutinaPub,
     middleware,
     revisarEjercicioRutina,
-    obtenerEjerciciosPrivadoUsuario
+    obtenerEjerciciosPrivadoUsuario,
+    esCardio,
+    anadirEjercicioCardio,
+    modificarTiempo,
+    modificarCarga
 }
