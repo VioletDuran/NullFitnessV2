@@ -16,6 +16,8 @@ INSERT INTO musculos(musculo) VALUES('Trapecios');--7
 INSERT INTO musculos(musculo) VALUES('Dorsales');--8
 INSERT INTO musculos(musculo) VALUES('Cuadriceps');--9
 INSERT INTO musculos(musculo) VALUES('Cardiovascular');--10
+INSERT INTO musculos(musculo) VALUES('Core'); --11
+INSERT INTO musculos(musculo) VALUES('Antebrazo'); --11
 
 --Ejercicios
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Press de banca','Press de banca','../../../assets/img/press-banca-1.jpg', 'El press de banca es un ejercicio multiarticular que, lógicamente, no sólo implica a la musculatura pectoral. Por tanto, debemos de tener en cuenta cada uno de los músculos implicados en está acción para poder progresar en este ejercicio. Es uno de los mejores para trabajar el pecho.','https://www.youtube.com/embed/GeLq8cMODLc');
@@ -42,7 +44,7 @@ INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VA
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Prensa de piernas','Prensa de piernas','../../../assets/img/pren.jpg','La prensa de piernas es un ejercicio compuesto para las piernas, que se centra en los cuádriceps. Dependiendo del ángulo de los pies y de lo abiertos o cerrados que los coloques en la plataforma, también se puede aumentar la implicación de los isquiotibiales y los glúteos.','https://www.youtube.com/embed/D1FvjYNX9QI');
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Extensión de rodillas en máquina','Extensión de rodillas en máquina','../../../assets/img/extension-de-piernas-en-maquina-init-pos-7748.png','La extensión de la rodilla es un ejercicio que puede realizarse con una máquina de pesas para trabajar el músculo que se encuentra en la parte delantera del muslo. La extensión de las rodillas trabaja específicamente el músculo cuádriceps.','https://www.youtube.com/embed/qnx1ZhzCKnI');
 INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Cardio en bicicleta estatica','Cardio en bicicleta estatica','../../../assets/img/man-on-stationary-bike.jpg','Usar la bicicleta estática es optar por un ejercicio de cardio que fortalece tu corazón, tus pulmones y tus músculos, y mejora el flujo sanguíneo. Se traduce en beneficios como la mejora de la memoria y la función cerebral, la bajada de presión sanguínea, mayor calidad de sueño, mejora de los niveles de azúcar en sangre, un sistema inmune más fuerte, menos estrés, más energía y mejor humor.','https://www.youtube.com/embed/j1z-kVbdqfk?si=T07Fv2M6rm8oiocl');
-INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Cardio en cinta','Cardio en cinta','../../../assets/img/CardioCinta.jpg','Ejercitar en una cinta de correr es una excelente manera de hacer ejercicio cardiovascular, y puede adaptarse a cualquier nivel de fitness.','https://www.youtube.com/embed/JE3w809VwO8?si=-sB_R66Rhxme4Ltc');
+INSERT INTO ejercicios(tituloejercicio, titulofoto, foto, descripcion, video) VALUES ('Cardio en cinta','Cardio en cinta','../../../assets/img/cardiocinta.jpg','Ejercitar en una cinta de correr es una excelente manera de hacer ejercicio cardiovascular, y puede adaptarse a cualquier nivel de fitness.','https://www.youtube.com/embed/JE3w809VwO8?si=-sB_R66Rhxme4Ltc');
 
 
 
