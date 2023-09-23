@@ -10,10 +10,10 @@ export interface datosModificables{
     idusuario: string;
     edad: string;
     peso: string;
-    nacionalidad: string;
-    contextura: string;
     objetivo: string;
-    cantidad_ejercicio: string;
+    genero: string;
+    altura: string;
+    experiencia: string;
 }
 
 export interface usuarioFinal{

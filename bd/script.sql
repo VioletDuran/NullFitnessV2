@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS usuarios (
   nombre text NOT NULL,
   foto text NULL,
   peso INT NULL,
-  nacionalidad text NULL,
-  contextura text NULL,
+  experiencia text NULL,
+  altura INT NULL,
+  genero text NULL,
   objetivo text NULL,
-  cantidad_ejercicio INT NULL,
   PRIMARY KEY (idUsuario),
   CONSTRAINT tipo_usuario
     FOREIGN KEY (tipoUsuario)
