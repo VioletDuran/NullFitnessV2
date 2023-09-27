@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS usuarios (
   nombre text NOT NULL,
   foto text NULL,
   peso INT NULL,
-  nacionalidad text NULL,
-  contextura text NULL,
+  experiencia text NULL,
+  altura INT NULL,
+  genero text NULL,
   objetivo text NULL,
-  cantidad_ejercicio INT NULL,
   PRIMARY KEY (idUsuario),
   CONSTRAINT tipo_usuario
     FOREIGN KEY (tipoUsuario)
@@ -195,8 +195,7 @@ CREATE TABLE IF NOT EXISTS ejercicios_musculos (
 /* SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS; */
 /* SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS; */
 
---Hola
-
---Holaaa
-
---holaaaa
+ALTER TABLE rutinas_ejercicios
+ADD COLUMN series VARCHAR,
+ADD COLUMN repeticiones VARCHAR,
+ADD COLUMN tiempo VARCHAR;

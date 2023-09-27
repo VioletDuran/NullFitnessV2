@@ -16,4 +16,4 @@ app.use(express.static("./public"));
 app.use(require('./routes/index'));
 
 //console.log("Server Activo en el puerto 3000");
-app.listen(3000);
+app.listen(3000,()=>console.log("listen"));
