@@ -58,30 +58,30 @@ export class LoginRegistroComponent implements OnInit {
     }
 
     if (this.formularioLogin.status === 'VALID') {
-     await this.login.devolverLogin(datos.correo,datos.contraseña);
-        if(this.login.isLoggedIn == true){
-          Swal.fire({
-            title: 'Inicio de sesion exitoso!',
-            text: 'Iniciaste de forma correcta.',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#00a000'
-          })
-          this.router.navigate(['']);
-        }else{
-          Swal.fire({
-            title: 'Error!',
-            text: 'Correo o contraseña incorrectos.',
-            icon: 'error',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: "#6D0101"
-          })
-        }
-      }
+     this.login.logearUsuario(datos.correo,datos.contraseña).subscribe((res) =>{
+      Swal.fire({
+        title: 'Inicio de sesion exitoso!',
+        text: 'Iniciaste de forma correcta.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#00a000'
+      })
+      this.router.navigate(['']);
+     },(error)=> {
+      Swal.fire({
+        title: 'Error!',
+        text: error.error.error,
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: "#6D0101"
+      })
+    });}
     }
+
     correoLlenadoT(){
       this.correoLlenado = true;
     }
+
     pass(){
       this.passw = true;
     }

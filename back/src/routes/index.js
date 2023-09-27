@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const router = Router();
-const {revisarCorreo,registrarUsuario,loginUsuario,modificarDatos,devolverDatos,guardarFoto,upload,devolverRutinas, obtenerEjerciciosPrivados,obtenerEjerciciosTotales, devolverRutinasEspecifica,eliminarEjercicioDeRutina,anadirEjercicio,editarInfoRutinaPriv,guardarFotoRutina,devolverCoincidencias,eliminarEjercicioPublico,obtenerMusculosTotales,editarEjercicioPublico,guardarFotoEjercicio,guardarNuevoEjercicio,devolverRutinasPublicas,modificarRutinas,guardarFotoRutinaPub,eliminarRutinasPub,guardarNuevaRutinaPub,middleware,revisarEjercicioRutina,obtenerEjerciciosPrivadoUsuario,esCardio,anadirEjercicioCardio,modificarTiempo,modificarCarga} = require('../controllers/index.controller');
+const {revisarCorreo,modificarDatos,devolverDatos,guardarFoto,upload,devolverRutinas, obtenerEjerciciosPrivados,obtenerEjerciciosTotales, devolverRutinasEspecifica,eliminarEjercicioDeRutina,anadirEjercicio,editarInfoRutinaPriv,guardarFotoRutina,devolverCoincidencias,eliminarEjercicioPublico,obtenerMusculosTotales,editarEjercicioPublico,guardarFotoEjercicio,guardarNuevoEjercicio,devolverRutinasPublicas,modificarRutinas,guardarFotoRutinaPub,eliminarRutinasPub,guardarNuevaRutinaPub,middleware,revisarEjercicioRutina,obtenerEjerciciosPrivadoUsuario,esCardio,anadirEjercicioCardio,modificarTiempo,modificarCarga} = require('../controllers/index.controller');
 
 //Gets
 router.get('/users/devolverDatos',middleware,devolverDatos);
@@ -16,8 +16,8 @@ router.get('/users/obtenerEjerciciosPrivadoUsuario/:id',obtenerEjerciciosPrivado
 router.get('/users/esCardio/:id',middleware,esCardio)
 
 //Posts
-router.post('/users/registro', registrarUsuario);
-router.post('/users/login',loginUsuario);
+router.use('/users/', require('./user'));
+
 
 
 router.post('/users/guardarFoto',middleware,upload.single("myFile"),guardarFoto);

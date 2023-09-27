@@ -1,6 +1,6 @@
-const { Pool } = require('pg');
 const multer = require('multer');
 const { json } = require('express');
+const pool = require('../config/db.config')
 
 function middleware(req,res,next){
     try {
@@ -21,15 +21,6 @@ function middleware(req,res,next){
         res.send(false)
     }
 }
-
-const pool = new Pool({
-    host: 'localhost',
-    user: 'postgres',
-    password: 'fugox123',
-    database: 'web',
-    port: '5432'
-})
-
 
 const storage = multer.diskStorage({
     filename: function (res, file, cb) {
@@ -124,20 +115,7 @@ const devolverRutinas = async (req, res) =>{
     }
 }
 
-const generarEjerciciosBasicos = async(idUsuario) =>{
-    idUsuario = idUsuario["idusuario"];
-    let rutinas = await pool.query('select idrutinas from rutinas where idusuario = $1',[idUsuario]);
-    for(let i = 0; i <= 5; i++){
-        await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],1]);
-        await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],2]);
-        await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],3]);
-        await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],4]);
-        await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],5]);
-        await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],6]);
-    }
-    pool.end;
-    return;
-}
+
 
 const devolverRutinasEspecifica = async (req, res) =>{
     try {
@@ -151,73 +129,8 @@ const devolverRutinasEspecifica = async (req, res) =>{
     }
 }
 
-const crearRutinas = async (idUsuario) =>{
-    for(let i = 1; i <= 6; i++){
-        let nombreRutina = "MiRutina " + i;
-        let fotoNormal = "../../../assets/img/mirutina1.jpg";
-        let descripcion = "Rutina preestablecida"
-        await pool.query('INSERT INTO rutinas (titulorutina, foto, descripcion,idusuario) VALUES ($1, $2, $3, $4)',[nombreRutina, fotoNormal, descripcion, idUsuario["idusuario"]]);
-        pool.end;
-    }
-    generarEjerciciosBasicos(idUsuario);
-    return;
-}
 
 
-const registrarUsuario = async (req, res) => {
-    try {
-        const { nombre, nombreUsuario, edad, correo, contraseña} = req.body;
-        const bcrypt = require('bcrypt');
-        const saltRounds = 10;
-        let auxContraseña =  bcrypt.hashSync(contraseña, saltRounds, (err, hash) => {
-            if (err) throw (err)
-            contraseña = hash;
-        });
-        let fotoOriginal = "../../../assets/img/usuario.png";
-        let con = await pool.query('INSERT INTO usuarios (tipousuario, correo, contraseña, nombreusuario, edad, nombre, foto) VALUES ($1, $2, $3, $4, $5, $6, $7)', [1,correo,auxContraseña,nombreUsuario,edad,nombre, fotoOriginal]);
-        let obtenerId = await pool.query('select idusuario from usuarios where correo = $1',[correo]);
-        crearRutinas(obtenerId.rows[0]);
-        if(!con){
-            pool.end;
-            res.status(200).send(false);
-        }else{
-            pool.end;
-            res.status(200).send(true);
-        }
-    } catch (error) {
-        return res.send(false)
-    }
-}
-
-const loginUsuario = async (req,res) => {
-    try {
-        let flagAdmin = 0;
-        const {correo,contraseña} = req.body;
-        const response = await pool.query('select idusuario,contraseña,tipousuario from usuarios where correo = $1',[correo]);
-        const bcrypt = require('bcrypt');
-        const jwt = require('jsonwebtoken');
-        if(response.rows[0].tipousuario == '2' && contraseña == response.rows[0].contraseña){
-            flagAdmin = 1;
-        }
-        if((response.rows.length != 0 && bcrypt.compareSync(contraseña, response.rows[0].contraseña)) || flagAdmin == 1){
-                let resultado = response.rows[0];
-                delete resultado.password;
-                let token = jwt.sign({
-                    data: resultado
-                }, 'secret', { expiresIn: 60 * 60 * 24}) // Expira en 1 día
-                pool.end;
-                return res.json({
-                    token,
-                    valor: true
-                })
-        }else{
-            pool.end;
-            res.status(400).send(false);
-        }
-    } catch (error) {
-        return res.send(false);
-    }
-}
 
 const modificarDatos =  async (req, res) => {
     try {
@@ -473,8 +386,6 @@ const modificarCarga = async(req,res) =>{
 
 module.exports = {
     revisarCorreo,
-    registrarUsuario,
-    loginUsuario,
     modificarDatos,
     devolverDatos,
     guardarFoto,
