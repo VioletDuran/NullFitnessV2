@@ -3,24 +3,6 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 const fotoOriginal = "../../../assets/img/usuario.png"
-const upload = multer({ storage });
-
-const storage = multer.diskStorage({
-    filename: function (res, file, cb) {
-      const fileName = file.originalname;
-      cb(null, `${fileName}`);
-    },
-    destination: function (res, file, cb) {
-      const carpeta = res.query['carpeta'];
-      if(carpeta == undefined){
-        cb(null, './public');
-      }else{
-        cb(null, './public/' + carpeta);
-      }
-      
-    },
-  });
-
 
 const registrarUsuario = async (req, res, next) => {
     try {
@@ -123,4 +105,4 @@ const guardarFoto = async (req, res) => {
   res.send(true);
 }
 
-module.exports = {registrarUsuario,loginUsuario,guardarFoto,upload}
+module.exports = {registrarUsuario,loginUsuario,guardarFoto}

@@ -2,6 +2,7 @@ const { Router } = require('express');
 const user = Router();
 const {registrarUsuario,loginUsuario,guardarFoto} = require('../controllers/user.controller')
 const userExtractor = require('../middlewares/userExtractor')
+const upload = require('../middlewares/upload')
 
 
 user.post('/registro', registrarUsuario);

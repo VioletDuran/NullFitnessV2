@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config()
 
-function userExtractor(req,res,next){
+module.exports = (req,res,next) =>{
     try {
         const token = req.headers['token'];        
         const secretKey = process.env.secretkey;
         jwt.verify(token, secretKey, (err, decoded) => {
             if (err) {
+                console.log(err);
                 return res.status(401).send({error:'No estas autorizado'});
             } else {
               req.idusuario = decoded.data;
@@ -18,4 +20,3 @@ function userExtractor(req,res,next){
     }
 }
 
-module.exports = {userExtractor}
