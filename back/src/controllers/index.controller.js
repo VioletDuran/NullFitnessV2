@@ -1,53 +1,5 @@
-const multer = require('multer');
 const { json } = require('express');
 const pool = require('../config/db.config')
-
-function middleware(req,res,next){
-    try {
-        const token = req.headers['token'];
-        const dotenv = require('dotenv').config({ path: 'pass.env' });
-        const secretKey = process.env.secretkey;
-        const jwt = require('jsonwebtoken');
-        jwt.verify(token, secretKey, (err, decoded) => {
-            if (err) {
-                console.log(err);
-                return res.status(401).send(false);
-            } else {
-              req.idusuario = decoded.data;
-              next();
-            }
-        });
-    } catch (error) {
-        res.send(false)
-    }
-}
-
-const storage = multer.diskStorage({
-    filename: function (res, file, cb) {
-      const fileName = file.originalname;
-      cb(null, `${fileName}`);
-    },
-    destination: function (res, file, cb) {
-      const carpeta = res.query['carpeta'];
-      if(carpeta == undefined){
-        cb(null, './public');
-      }else{
-        cb(null, './public/' + carpeta);
-      }
-      
-    },
-  });
-
-const upload = multer({ storage });
-
-const guardarFoto = async (req, res) => {
-  let file = req.file.filename;
-  let id = file.split(".");
-  file = "http://localhost:3000/" + file;
-  await pool.query('UPDATE usuarios SET foto = $1 where idusuario = $2', [file,id[0]]);
-  pool.end;
-  res.send(true);
-}
 
 const guardarFotoRutina = async (req,res) =>{
     let file = req.file.filename;
@@ -388,8 +340,6 @@ module.exports = {
     revisarCorreo,
     modificarDatos,
     devolverDatos,
-    guardarFoto,
-    upload,
     devolverRutinas,
     obtenerEjerciciosPrivados,
     obtenerEjerciciosTotales,
@@ -409,7 +359,6 @@ module.exports = {
     guardarFotoRutinaPub,
     eliminarRutinasPub,
     guardarNuevaRutinaPub,
-    middleware,
     revisarEjercicioRutina,
     obtenerEjerciciosPrivadoUsuario,
     esCardio,

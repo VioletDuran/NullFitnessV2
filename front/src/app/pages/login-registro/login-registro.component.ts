@@ -60,7 +60,7 @@ export class LoginRegistroComponent implements OnInit {
     if (this.formularioLogin.status === 'VALID') {
      this.login.logearUsuario(datos.correo,datos.contraseña).subscribe((res) =>{
       Swal.fire({
-        title: 'Inicio de sesion exitoso!',
+        title: res.msg,
         text: 'Iniciaste de forma correcta.',
         icon: 'success',
         confirmButtonText: 'Aceptar',
@@ -70,7 +70,7 @@ export class LoginRegistroComponent implements OnInit {
      },(error)=> {
       Swal.fire({
         title: 'Error!',
-        text: error.error.error,
+        text: error.error.msg,
         icon: 'error',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: "#6D0101"
