@@ -17,6 +17,8 @@ router.get('/users/devolverRutinasPublicas/:id',devolverRutinasPublicas);
 router.get('/users/obtenerEjerciciosPrivadoUsuario/:id',obtenerEjerciciosPrivadoUsuario);
 router.get('/users/esCardio/:id',userExtractor,esCardio)
 
+router.use('/gpt/',require('./gpt'));
+
 //Posts
 router.use('/users/', require('./user'));
 
