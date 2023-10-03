@@ -18,11 +18,11 @@ export class ServicioLoginService {
 
   constructor(private httpClient: HttpClient) { }
 
-  logearUsuario(correo: string, contraseña: string): Observable<{ token: string }> {
+  logearUsuario(correo: string, contraseña: string): Observable<{ token: string  , msg:string}> {
     const body = { correo, contraseña };
     const endpoint = this.url + this.USUARIO_LOGIN_ENDPOINT;
 
-    return this.httpClient.post<{ token: string }>(endpoint, body).pipe(
+    return this.httpClient.post<{ token: string , msg: string}>(endpoint, body).pipe(
       tap((res) => {
         const decodedToken = this.helper.decodeToken(res.token);
         this.storeTokenData(decodedToken);
