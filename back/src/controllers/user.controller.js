@@ -64,6 +64,7 @@ const loginUsuario = async (req, res) => {
             return res.status(404).send({msg: 'Correo no registrado'});
         }
     } catch (error) {
+        console.log(error);
         return res.status(500).send({msg: 'Hubo un error no esperado'});
     }
 }
@@ -74,7 +75,6 @@ const crearRutinas = async (idUsuario) =>{
         let fotoNormal = "../../../assets/img/mirutina1.jpg";
         let descripcion = "Rutina preestablecida"
         await pool.query('INSERT INTO rutinas (titulorutina, foto, descripcion,idusuario) VALUES ($1, $2, $3, $4)',[nombreRutina, fotoNormal, descripcion, idUsuario["idusuario"]]);
-        pool.end;
     }
     generarEjerciciosBasicos(idUsuario);
     return;
@@ -91,7 +91,6 @@ const generarEjerciciosBasicos = async(idUsuario) =>{
         await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],5]);
         await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],6]);
     }
-    pool.end;
     return;
 }
 
@@ -104,4 +103,32 @@ const guardarFoto = async (req, res) => {
   res.send(true);
 }
 
-module.exports = {registrarUsuario,loginUsuario,guardarFoto}
+const devolverDatos =  async (req, res) => {
+    try {
+        let id = req.idusuario.idusuario;
+        const response = await pool.query('select idusuario, nombreusuario, edad, nombre, foto, peso, experiencia, altura, genero, objetivo from usuarios where idusuario = $1',[id]);
+        let resultado = response.rows[0];
+        return res.json(resultado);
+    } catch (error) {
+        console.log(error)
+        return res.status(404);
+    }
+}
+
+
+const revisarCorreo =  async (req, res) => {
+    try {
+        const correo = req.params.correo;
+        const response = await pool.query('select correo from usuarios where correo = $1',[correo]);
+        if(response.rows.length == 1){
+            return res.status(409).send({msg:'El correo ya se encuentra registrado.', valor:true});
+        }else{
+           return  res.status(200).send({msg:'La cuenta se creo de manera correcta.', valor:false}); 
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500)
+    }
+}
+
+module.exports = {registrarUsuario,loginUsuario,guardarFoto,devolverDatos,revisarCorreo}

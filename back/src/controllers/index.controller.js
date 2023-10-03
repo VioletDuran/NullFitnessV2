@@ -28,22 +28,6 @@ const guardarFotoEjercicio = async(req,res) =>{
     res.send(true);
 }
 
-const revisarCorreo =  async (req, res) => {
-    try {
-        const correo = req.params.correo;
-        const response = await pool.query('select correo from usuarios where correo = $1',[correo]);
-        if(response.rows.length == 1){
-            pool.end;
-            res.send(true);
-        }else{
-            pool.end;
-            res.status(200).send(false); 
-        }
-    } catch (error) {
-        return res.send(false)
-    }
-}
-
 const obtenerEjerciciosPrivados = async(req,res) =>{
     try {
         const id = req.params.id;
@@ -66,8 +50,6 @@ const devolverRutinas = async (req, res) =>{
         return res.json(false);
     }
 }
-
-
 
 const devolverRutinasEspecifica = async (req, res) =>{
     try {
@@ -98,17 +80,6 @@ const modificarDatos =  async (req, res) => {
     }
 }
 
-const devolverDatos =  async (req, res) => {
-    try {
-        let id = req.idusuario.idusuario;
-        const response = await pool.query('select idusuario, nombreusuario, edad, nombre, foto, peso, experiencia, altura, genero, objetivo from usuarios where idusuario = $1',[id]);
-        pool.end;
-        let resultado = response.rows[0];
-        return res.json(resultado);
-    } catch (error) {
-        return res.send(error);
-    }
-}
 
 const obtenerEjerciciosTotales = async (req, res) =>{
     try {
@@ -337,9 +308,7 @@ const modificarCarga = async(req,res) =>{
 }
 
 module.exports = {
-    revisarCorreo,
     modificarDatos,
-    devolverDatos,
     devolverRutinas,
     obtenerEjerciciosPrivados,
     obtenerEjerciciosTotales,

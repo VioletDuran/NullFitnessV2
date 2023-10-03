@@ -71,26 +71,29 @@ export class RegistroComponent implements OnInit {
       if (this.formularioRegistro.status === 'VALID') {
       let datos = this.formularioRegistro.value;
       this.servicio.revisarCorreo(datos.correo).subscribe((value) =>{
-        if(value == true){
-          Swal.fire({
-            title: 'Error!',
-            text: 'El correo ya se encuentra registrado.',
-            icon: 'error',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: "#6D0101"
-          })
-        }else{
-          this.servicio.completarRegistro(datos);
-          Swal.fire({
+        console.log(value);
+
+        Swal.fire({
             title: 'Registro exitoso!',
-            text: 'La cuenta se creo de manera correcta',
+            text: value.msg,
             icon: 'success',
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#00a000'
-          })
-          this.router.navigate(['']);
-        }
-      })
+        });
+        this.router.navigate(['']);
+    },(error) => {
+        console.log(error);
+
+        if (error.status === 409)  // Conflict
+          Swal.fire({
+            title: 'Error!',
+            text: error.error.msg, // Acceder al mensaje enviado desde el backend
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: "#6D0101"
+          });
+    }
+);
     }
   }
 }

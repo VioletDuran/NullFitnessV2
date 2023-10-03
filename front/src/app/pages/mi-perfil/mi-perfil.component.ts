@@ -15,13 +15,13 @@ import { NgForm } from '@angular/forms';
 export class MiPerfilComponent implements OnInit {
   arrayMostrar:Rutina[] = [];
   Usuario: usuarioFinal | any = {
-    idusuario : "", 
-    nombreusuario : "", 
-    edad : "", 
-    nombre : "", 
-    foto : "", 
-    peso : "", 
-    experiencia : "", 
+    idusuario : "",
+    nombreusuario : "",
+    edad : "",
+    nombre : "",
+    foto : "",
+    peso : "",
+    experiencia : "",
     altura : "",
     genero: "",
     objetivo: ""
@@ -49,6 +49,8 @@ export class MiPerfilComponent implements OnInit {
     }
     if(this.datosCargados == false){
       this.perfil.cargarDatos(this.estado.idUsuario).subscribe((valor) =>{
+        console.log(valor);
+
         this.Usuario = valor;
         if(this.Usuario.peso != null){
           this.Usuario.peso = this.Usuario.peso + " Kg";
@@ -112,10 +114,10 @@ export class MiPerfilComponent implements OnInit {
           }
         })
       }
-      
+
     })
   }
-  
+
 
   //Se ciera la sesion del usuario
   cerrarSesion(){
@@ -252,7 +254,7 @@ export class MiPerfilComponent implements OnInit {
     })
   }
   cambiarFotoPriv($event: any,idrutinas:any) {
-    const [ file ] = $event.target.files; 
+    const [ file ] = $event.target.files;
     let extension = 'jpg';
     let nombreFinal = idrutinas + '_rutinaPriv' + '.' + extension;
     this.fileTemp = {
@@ -291,7 +293,7 @@ export class MiPerfilComponent implements OnInit {
           }
         })
       }
-      
+
     })
   }
 

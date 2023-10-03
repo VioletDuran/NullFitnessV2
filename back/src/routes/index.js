@@ -2,14 +2,14 @@ const { Router } = require('express');
 const router = Router();
 const userExtractor = require('../middlewares/userExtractor')
 const upload = require('../middlewares/upload')
-const {revisarCorreo,modificarDatos,devolverDatos,devolverRutinas, obtenerEjerciciosPrivados,obtenerEjerciciosTotales, devolverRutinasEspecifica,eliminarEjercicioDeRutina,anadirEjercicio,editarInfoRutinaPriv,guardarFotoRutina,devolverCoincidencias,eliminarEjercicioPublico,obtenerMusculosTotales,editarEjercicioPublico,guardarFotoEjercicio,guardarNuevoEjercicio,devolverRutinasPublicas,modificarRutinas,guardarFotoRutinaPub,eliminarRutinasPub,guardarNuevaRutinaPub,revisarEjercicioRutina,obtenerEjerciciosPrivadoUsuario,esCardio,anadirEjercicioCardio,modificarTiempo,modificarCarga} = require('../controllers/index.controller');
+const {modificarDatos,devolverRutinas, obtenerEjerciciosPrivados,obtenerEjerciciosTotales, devolverRutinasEspecifica,eliminarEjercicioDeRutina,anadirEjercicio,editarInfoRutinaPriv,guardarFotoRutina,devolverCoincidencias,eliminarEjercicioPublico,obtenerMusculosTotales,editarEjercicioPublico,guardarFotoEjercicio,guardarNuevoEjercicio,devolverRutinasPublicas,modificarRutinas,guardarFotoRutinaPub,eliminarRutinasPub,guardarNuevaRutinaPub,revisarEjercicioRutina,obtenerEjerciciosPrivadoUsuario,esCardio,anadirEjercicioCardio,modificarTiempo,modificarCarga} = require('../controllers/index.controller');
 
 //Gets
-router.get('/users/devolverDatos',userExtractor,devolverDatos);
+router.use('/users/', require('./user'));
+
 router.get('/users/devolverRutinas',userExtractor, devolverRutinas);
 router.get('/users/devolverRutinasEspecifica/:id',devolverRutinasEspecifica);
 router.get('/users/obtenerEjerciciosPrivados/:id',obtenerEjerciciosPrivados);
-router.get('/users/:correo',revisarCorreo);
 router.get('/users/obtenerEjerciciosTotales/:id',obtenerEjerciciosTotales);
 router.get('/users/devolverCoincidencias/:coincidencia',devolverCoincidencias);
 router.get('/users/obtenerMusculosTotales/:id',obtenerMusculosTotales);
@@ -18,11 +18,6 @@ router.get('/users/obtenerEjerciciosPrivadoUsuario/:id',obtenerEjerciciosPrivado
 router.get('/users/esCardio/:id',userExtractor,esCardio)
 
 router.use('/gpt/',require('./gpt'));
-
-//Posts
-router.use('/users/', require('./user'));
-
-
 
 
 router.post('/users/anadirEjercicio',userExtractor,anadirEjercicio);

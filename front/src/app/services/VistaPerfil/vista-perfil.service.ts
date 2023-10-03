@@ -17,17 +17,17 @@ export class VistaPerfilService {
 			token: localStorage.getItem('token') || '',
 		}),
 	};
-  
+
   constructor(private httpClient:HttpClient) {
   }
-  
-  ngOnInit(): void { 
+
+  ngOnInit(): void {
   }
 
   devolverRutinas(): Observable<any>{
     return this.httpClient.get(this.url);
   }
- 
+
   obtenerRutinas(idusuario:string): Observable<any>{
     return this.httpClient.get(this.urlHttp +'/devolverRutinas',this.HttpOptions);
   }
