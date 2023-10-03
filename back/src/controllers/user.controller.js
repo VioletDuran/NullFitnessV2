@@ -28,9 +28,9 @@ const registrarUsuario = async (req, res, next) => {
                                     crearRutinas(idUsuario);
                                     res.status(200).send(true)
                                 })
-                                .catch(error => res.status(400).json({error: error.message}))
+                                .catch(error => res.status(400).json({msg: error.message}))
                             })
-                            .catch(error => res.status(400).json({error: error.message}))
+                            .catch(error => res.status(400).json({msg: error.message}))
                     }
                 })
                 .catch()
@@ -42,30 +42,29 @@ const registrarUsuario = async (req, res, next) => {
     }
 }
 
-const loginUsuario = async (req,res,next) => {
-    const {correo,contraseña} = req.body;
+const loginUsuario = async (req, res) => {
+    const { correo, contraseña } = req.body;
+
     try {
-        await pool 
-        .query('select idusuario,contraseña,tipousuario from usuarios where correo = $1',[correo])
-        .then(results => {
-            if (results.rows.length > 0){
-                const user = results.rows[0]
-                if(bcrypt.compareSync(contraseña, user.contraseña)){
-                    delete user.contraseña
-                    const token =  jwt.sign({
-                        data: user
-                    }, 'secret', { expiresIn: 60 * 60 * 24}) // Expira en 1 día
-                    res.status(202).json({ token, valor: true})
-                } else {
-                    res.status(406).send({error:'Email o contraseña incorrecta'})
-                } 
+        const results = await pool.query('select idusuario,contraseña,tipousuario from usuarios where correo = $1', [correo]);
+
+        if (results.rows.length > 0) {
+            const user = results.rows[0];
+
+            if (bcrypt.compareSync(contraseña, user.contraseña)) {
+                delete user.contraseña;
+                const token = jwt.sign({
+                    data: user
+                }, 'secret', { expiresIn: 60 * 60 * 24 }); // Expira en 1 día
+                return res.status(202).json({token, msg: 'Inicio de sesion exitoso!'});
             } else {
-                res.status(404).send({error:'Correo no registrado'})
+                return res.status(406).send({msg: 'Email o contraseña incorrecta'});
             }
-        })
-        .catch (error => res.status(404).send({error:'Hubo un error no esperado'}))
-    } catch (error){
-        next(error)
+        } else {
+            return res.status(404).send({msg: 'Correo no registrado'});
+        }
+    } catch (error) {
+        return res.status(500).send({msg: 'Hubo un error no esperado'});
     }
 }
 
@@ -96,4 +95,13 @@ const generarEjerciciosBasicos = async(idUsuario) =>{
     return;
 }
 
-module.exports = {registrarUsuario,loginUsuario}
+const guardarFoto = async (req, res) => {
+  let file = req.file.filename;
+  let id = file.split(".");
+  file = "http://localhost:3000/" + file;
+  await pool.query('UPDATE usuarios SET foto = $1 where idusuario = $2', [file,id[0]]);
+  pool.end;
+  res.send(true);
+}
+
+module.exports = {registrarUsuario,loginUsuario,guardarFoto}
