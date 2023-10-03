@@ -9,15 +9,19 @@ const openai = new OpenAI({
 async function generarPrompt(){
     var ejercicios = '';
     var prompt = `Con los siguientes ejercicios, quiero una rutina fisica que se enfoque en fortalecer los gluteos, necesito que solamente me entregues los id, con sus respectivas series y repeticiones, no me escribas nada aparte de lo solicitado\n`
-    await pool
-    .query('select idejercicio,tituloejercicio from ejercicios;')
-    .then(results => {
-        for(x in results.rows){
-            ejercicios = ejercicios + "Id:" + results.rows[x].idejercicio + " Nombre:" + results.rows[x].tituloejercicio + "\n";
-        }
-    })
-    prompt = prompt + ejercicios;
-    return prompt;
+    try {
+        await pool
+        .query('select idejercicio,tituloejercicio from ejercicios;')
+        .then(results => {
+            for(x in results.rows){
+                ejercicios = ejercicios + "Id:" + results.rows[x].idejercicio + " Nombre:" + results.rows[x].tituloejercicio + "\n";
+            }
+        })
+        prompt = prompt + ejercicios;
+        return prompt;
+    } catch (error) {
+        res.status(444).send({msg: "Error al consultar los ejercicios de la base de datos"});
+    }
 }
 
 const generarRecomendacion = async(req,res) =>{
