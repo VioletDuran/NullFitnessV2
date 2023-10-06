@@ -54,7 +54,7 @@
     <div class = "container-fluid">
         <form #fotoRut = "ngForm">
         <div class = "row text-center">
-            <div class = "col-lg-4 col-md-6 col-sm-6 my-4" *ngFor="let aux of arrayMostrar">
+            <div class = "col-lg-4 col-md-6 col-sm-12 my-4" *ngFor="let aux of arrayMostrar">
                 <h4 class = "fw-bolder">{{aux.titulorutina}}</h4>
                 <a [routerLink] = "['/MisEjercicios',aux.idrutinas]"><img class = "tamaño-fotos rounded" [src]="aux.foto" alt="Foto Referencia Abdominal"></a>
                 <div class = "row text-center">
@@ -64,6 +64,11 @@
                         </label>
                         <input ngModel name = "fotoRuti" (change) = "cambiarFotoPriv($event,aux.idrutinas)" [id]="aux.idrutinas" type="file" accept=".jpg,.png"/>
                     </div>
+                </div>
+                <div class = "col my-1">
+                    <button (click)="recomendacion(aux.idrutinas)" class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">
+                        Recomendación
+                    </button>
                 </div>
             </div>
         </div>

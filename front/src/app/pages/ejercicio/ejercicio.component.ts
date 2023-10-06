@@ -28,7 +28,6 @@ export class EjercicioComponent implements OnInit {
     }
     this.ejerciciospublicos.devolverEjercicios().subscribe((valor) => {
       this.ejerciciopublicoUnico = valor;
-      console.log(this.ejerciciopublicoUnico);
       this.ejercicioEspecifico = this.obtenerObjeto(this.ejerciciopublicoUnico);
       this.url = this.ejercicioEspecifico.video;
       this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);

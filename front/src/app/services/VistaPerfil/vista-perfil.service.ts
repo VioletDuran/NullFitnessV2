@@ -47,8 +47,17 @@ export class VistaPerfilService {
   guardarFoto(datoImagen:any): Observable<any> {
     return this.httpClient.post(this.urlHttp+'/guardarFoto',datoImagen,this.HttpOptions);
   }
+
   guardarFotoRutina(datoImagen:any): Observable<any> {
     return this.httpClient.post(this.urlHttp+'/guardarFotoRutina?carpeta=rutinasPrivadas',datoImagen,this.HttpOptions);
+  }
+
+  generarRutinaUsuario(datos:any): Observable<any>{
+    return this.httpClient.post("http://localhost:3000/gpt/rutinaGenerada",datos,this.HttpOptions);
+  }
+
+  guardarRutinaUsuario(datos:any): Observable<any>{
+    return this.httpClient.post("http://localhost:3000/gpt/guardarRutinaGenerada",datos,this.HttpOptions);
   }
 }
 
