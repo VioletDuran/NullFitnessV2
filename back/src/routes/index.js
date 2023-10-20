@@ -2,7 +2,7 @@ const { Router } = require('express');
 const router = Router();
 const userExtractor = require('../middlewares/userExtractor')
 const upload = require('../middlewares/upload')
-const {eliminarEjercicioDeRutina,editarInfoRutinaPriv,eliminarEjercicioPublico,editarEjercicioPublico,modificarRutinas,eliminarRutinasPub,modificarTiempo,modificarCarga} = require('../controllers/index.controller');
+const {eliminarRutinasPub} = require('../controllers/index.controller');
 
 //Gets
 router.use('/users/', require('./user'));
@@ -34,14 +34,15 @@ router.use('/gpt/',require('./gpt'));
 
 
 //Puts
-router.put('/users/editarInfoRutinaPriv',userExtractor,editarInfoRutinaPriv);
-router.put('/users/modificarEjercicioPublico',userExtractor,editarEjercicioPublico);
-router.put('/users/modificarRutinas',userExtractor,modificarRutinas);
-router.put('/users/modificarTiempo',userExtractor,modificarTiempo);
-router.put('/users/modificarCarga',userExtractor,modificarCarga);
+//router.put('/users/editarInfoRutinaPriv',userExtractor,editarInfoRutinaPriv); //Editar informacion de rutina privada - RUTA: rutina 
+//router.put('/users/modificarEjercicioPublico',userExtractor,editarEjercicioPublico); //Editar informacion de un ejercicio - RUTA: ejercicio
+//router.put('/users/modificarRutinas',userExtractor,modificarRutinas); //Editar informacion de rutina - RUTA: rutina
+//router.put('/users/modificarTiempo',userExtractor,modificarTiempo); //Modificar el tiempo de un ejercicio - RUTA: ejercicio
+//router.put('/users/modificarCarga',userExtractor,modificarCarga); //Modificar la carga de un ejercicio - RUTA: ejercicio
 
 //Delete
-router.delete('/users/dataEliminarEjercicioRutina',userExtractor,eliminarEjercicioDeRutina);
-router.delete('/users/EliminarEjercicioPublico',userExtractor,eliminarEjercicioPublico);
-router.delete('/users/EliminarRutinasPub',userExtractor,eliminarRutinasPub);
+//router.delete('/users/dataEliminarEjercicioRutina',userExtractor,eliminarEjercicioDeRutina);//Eliminar un ejercicio de una rutina - RUTA:rutina 
+//router.delete('/users/EliminarEjercicioPublico',userExtractor,eliminarEjercicioPublico);//Eliminar un ejercicio publico - RUTA: ejercicio
+//router.delete('/users/EliminarRutinasPub',userExtractor,eliminarRutinasPub);//Eliminar una rutina publica - RUTA: rutina
+
 module.exports = router;

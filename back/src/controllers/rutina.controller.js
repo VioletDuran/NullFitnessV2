@@ -117,6 +117,130 @@ const anadirEjercicioCardio = async(req,res) =>{
     }
 }
 
+const editarInfoRutinaPriv = async (req, res) => {
+    const { idrutinas, titulorutina, descripcion } = req.body;
+
+    try {
+        const response = await pool.query(
+            'UPDATE rutinas SET titulorutina = $1, descripcion = $2 WHERE idrutinas = $3 RETURNING *',
+            [titulorutina, descripcion, idrutinas]
+        );
+
+        // Verificar si la consulta realmente afectó alguna fila
+        if (response.rowCount > 0) {
+            return res.status(200).json({
+                success: true,
+                message: "Rutina actualizada con éxito",
+                data: response.rows[0] // Retornar los datos actualizados (si deseas hacerlo)
+            });
+        } else {
+            return res.status(404).json({
+                success: false,
+                message: "No se encontró la rutina para actualizar"
+            });
+        }
+    } catch (error) {
+        console.error("Error al actualizar la rutina:", error.message || error);
+        return res.status(500).json({
+            success: false,
+            message: "Error interno del servidor"
+        });
+    }
+}
+
+const modificarRutinas = async (req, res) => {
+    const { idrutinas, titulorutina, descripcion, ejercicios } = req.body;
+
+    try {
+        // Comenzar una transacción
+        await pool.query('BEGIN');
+
+        // Eliminar las relaciones previas con ejercicios
+        await pool.query('DELETE FROM rutinas_ejercicios WHERE idrutinas = $1', [idrutinas]);
+
+        // Actualizar la rutina
+        await pool.query('UPDATE rutinas SET titulorutina = $1, descripcion = $2 WHERE idrutinas = $3', [titulorutina, descripcion, idrutinas]);
+
+        // Insertar las relaciones con los ejercicios
+        for (let ejercicio of ejercicios) {
+            await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1, $2)', [idrutinas, ejercicio]);
+        }
+
+        // Finalizar la transacción
+        await pool.query('COMMIT');
+
+        res.status(200).json({
+            success: true,
+            message: 'Rutina modificada con éxito'
+        });
+    } catch (error) {
+        // En caso de error, deshacer todas las operaciones
+        await pool.query('ROLLBACK');
+        console.error("Error al modificar la rutina:", error.message || error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+}
+
+const eliminarEjercicioDeRutina = async (req, res) => {
+    const { idrutinas, idejericio } = req.body;
+
+    try {
+        const response = await pool.query(
+            'DELETE FROM rutinas_ejercicios WHERE idejercicios = $1 AND idrutinas = $2',
+            [idejericio, idrutinas]
+        );
+
+        // Verificando cuántas filas fueron afectadas por la consulta
+        if (response.rowCount > 0) {
+            res.status(200).json({
+                success: true,
+                message: 'Ejercicio eliminado de la rutina con éxito'
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: 'No se encontró el ejercicio en la rutina especificada'
+            });
+        }
+    } catch (error) {
+        console.error("Error al eliminar el ejercicio de la rutina:", error.message || error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+}
+
+const eliminarRutinasPub = async (req, res) => {
+    const { idrutinas } = req.body;
+
+    try {
+        const response = await pool.query('DELETE FROM rutinas WHERE idrutinas = $1', [idrutinas]);
+
+        // Verificando cuántas filas fueron afectadas por la consulta
+        if (response.rowCount > 0) {
+            res.status(200).json({
+                success: true,
+                message: 'Rutina eliminada con éxito'
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: 'No se encontró la rutina especificada'
+            });
+        }
+    } catch (error) {
+        console.error("Error al eliminar la rutina:", error.message || error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+}
+
 module.exports = {
     devolverRutinas,
     devolverRutinasEspecifica,
@@ -127,5 +251,9 @@ module.exports = {
     guardarFotoRutina,
     guardarFotoRutinaPub,
     guardarNuevaRutinaPub,
-    anadirEjercicioCardio
+    anadirEjercicioCardio,
+    editarInfoRutinaPriv,
+    modificarRutinas,
+    eliminarEjercicioDeRutina,
+    eliminarRutinasPub
 }

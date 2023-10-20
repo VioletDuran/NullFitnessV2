@@ -119,6 +119,143 @@ const revisarEjercicioRutina = async(req, res) => {
     }
 }
 
+const editarEjercicioPublico = async (req, res) => {
+    const { idejercicio, tituloejercicio, descripcion, video, musculos } = req.body;
+
+    try {
+        // Comenzar una transacción
+        await pool.query('BEGIN');
+
+        // Eliminar las relaciones previas con músculos
+        await pool.query('DELETE FROM ejercicios_musculos WHERE idejercicio = $1', [idejercicio]);
+
+        // Determinar la consulta de actualización según las condiciones proporcionadas
+        let query = 'UPDATE ejercicios SET tituloejercicio = $1, titulofoto = $1';
+        let values = [tituloejercicio, idejercicio];
+
+        if (descripcion && video && video.includes('youtube')) {
+            query += ', descripcion = $3, video = $4';
+            values.push(descripcion, video);
+        } else if (descripcion) {
+            query += ', descripcion = $3';
+            values.push(descripcion);
+        } else if (video && video.includes('youtube')) {
+            query += ', video = $3';
+            values.push(video);
+        }
+
+        query += ' WHERE idejercicio = $2';
+        await pool.query(query, values);
+
+        // Insertar las relaciones con los músculos
+        for (let i = 0; i < musculos.length; i++) {
+            await pool.query('INSERT INTO ejercicios_musculos(idejercicio, idmusculo) VALUES ($1, $2)', [idejercicio, musculos[i]]);
+        }
+
+        // Finalizar la transacción
+        await pool.query('COMMIT');
+
+        res.status(200).json({
+            success: true,
+            message: 'Ejercicio actualizado con éxito'
+        });
+    } catch (error) {
+        // En caso de error, deshacer todas las operaciones
+        await pool.query('ROLLBACK');
+        console.error("Error al actualizar el ejercicio:", error.message || error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+}
+
+const modificarTiempo = async (req, res) => {
+    const { idrutinas, idejercicios, tiempo } = req.body;
+
+    try {
+        const response = await pool.query(
+            'UPDATE rutinas_ejercicios SET tiempo = $3 WHERE idrutinas = $1 AND idejercicios = $2',
+            [idrutinas, idejercicios, tiempo]
+        );
+
+        if (response.rowCount > 0) { // rowCount verifica cuántas filas fueron afectadas por la consulta
+            res.status(200).json({
+                success: true,
+                message: 'Tiempo modificado con éxito'
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: 'No se encontró la combinación rutina-ejercicio especificada'
+            });
+        }
+    } catch (error) {
+        console.error("Error al modificar el tiempo:", error.message || error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+}
+
+const modificarCarga = async (req, res) => {
+    const { idrutinas, idejercicios, series, repeticiones } = req.body;
+
+    try {
+        const response = await pool.query(
+            'UPDATE rutinas_ejercicios SET series = $3, repeticiones = $4 WHERE idrutinas = $1 AND idejercicios = $2',
+            [idrutinas, idejercicios, series, repeticiones]
+        );
+
+        if (response.rowCount > 0) { // rowCount verifica cuántas filas fueron afectadas por la consulta
+            res.status(200).json({
+                success: true,
+                message: 'Carga modificada con éxito'
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: 'No se encontró la combinación rutina-ejercicio especificada'
+            });
+        }
+    } catch (error) {
+        console.error("Error al modificar la carga:", error.message || error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+}
+
+const eliminarEjercicioPublico = async (req, res) => {
+    const { idejercicio } = req.body;
+
+    try {
+        const response = await pool.query('DELETE FROM ejercicios WHERE idejercicio = $1', [idejercicio]);
+
+        // Verificando cuántas filas fueron afectadas por la consulta
+        if (response.rowCount > 0) {
+            res.status(200).json({
+                success: true,
+                message: 'Ejercicio eliminado con éxito'
+            });
+        } else {
+            res.status(404).json({
+                success: false,
+                message: 'No se encontró el ejercicio especificado'
+            });
+        }
+    } catch (error) {
+        console.error("Error al eliminar el ejercicio:", error.message || error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+}
+
+
 
 module.exports = {
     obtenerEjerciciosTotales,
@@ -127,5 +264,9 @@ module.exports = {
     obtenerMusculosEjercicios,
     guardarFotoEjercicio,
     guardarNuevoEjercicio,
-    revisarEjercicioRutina
+    revisarEjercicioRutina,
+    editarEjercicioPublico,
+    modificarTiempo,
+    modificarCarga,
+    eliminarEjercicioPublico
 }
