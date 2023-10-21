@@ -66,7 +66,6 @@ export class VistaEjerciciosComponent implements OnInit {
         preConfirm: () => {
             const idrutinas = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#rutina'))?.value;
             this.servicioEjercicio.revisarExisteEjercicio({ idrutinas: idrutinas, idejercicios: String(idejercicios)}).subscribe((valor) =>{
-              console.log(valor)
               if(valor == false){
                 Swal.fire({
                   title: 'Este ejercicio ya se encuentra en esta rutina',
@@ -91,7 +90,6 @@ export class VistaEjerciciosComponent implements OnInit {
                                 Swal.showValidationMessage(`Porfavor ingresa un tiempo valido entre 1 y 180`);
                               }else{
                                 this.servicioEjercicio.añadirEjercicioCardio({ idrutinas: idrutinas, idejercicios: String(idejercicios), tiempo: tiempoEjer}).subscribe((valor) => {
-                                  console.log(valor);
                                   Swal.fire({
                                     title: 'Se agrego ejercicio correctamente!',
                                     icon: 'success',
@@ -128,7 +126,6 @@ export class VistaEjerciciosComponent implements OnInit {
                               Swal.showValidationMessage(`Porfavor ingresa repeticiones validas entre 1 y 99`);
                             }else{
                               this.servicioEjercicio.añadirEjercicioRutina({ idrutinas: idrutinas, idejercicios: String(idejercicios), series: series , repeticiones: repes}).subscribe((valor) => {
-                                console.log(valor);
                                 Swal.fire({
                                   title: 'Se agrego ejercicio correctamente!',
                                   icon: 'success',

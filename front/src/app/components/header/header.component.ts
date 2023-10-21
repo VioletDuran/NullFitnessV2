@@ -51,7 +51,6 @@ export class HeaderComponent implements OnInit {
     this.control.valueChanges.pipe(debounceTime(500)).subscribe(query =>{
       this.busqueda.devolverCoincidencias(query).subscribe((valor) =>{
           this.ejercicios = valor;
-          console.log(this.ejercicios);
       })
     })
   }

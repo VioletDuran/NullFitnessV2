@@ -12,11 +12,6 @@ import { datosModificables } from './vista-perfil.type';
 export class VistaPerfilService {
   url:string = '../../../assets/datos/misRutinas.json';
   urlHttp:string = "http://localhost:3000/users";
-	private HttpOptions = {
-		headers: new HttpHeaders({
-			token: localStorage.getItem('token') || '',
-		}),
-	};
 
   constructor(private httpClient:HttpClient) {
   }
@@ -24,12 +19,20 @@ export class VistaPerfilService {
   ngOnInit(): void {
   }
 
+  private getHttpOptions() {
+    return {
+        headers: new HttpHeaders({
+            token: localStorage.getItem('token') || '',
+        }),
+    };
+}
+
   devolverRutinas(): Observable<any>{
     return this.httpClient.get(this.url);
   }
 
   obtenerRutinas(idusuario:string): Observable<any>{
-    return this.httpClient.get(this.urlHttp +'/devolverRutinas',this.HttpOptions);
+    return this.httpClient.get(this.urlHttp +'/devolverRutinas',this.getHttpOptions());
   }
 
   encontrarRutina(id:string | any, rutinas:vistaPerfil[]){
@@ -37,18 +40,27 @@ export class VistaPerfilService {
   }
 
   actualizarInformacionUsuario(usuario:datosModificables): Observable<any>{
-    return this.httpClient.put(this.urlHttp + "/modificarDatos",usuario,this.HttpOptions);
+    return this.httpClient.put(this.urlHttp + "/modificarDatos",usuario,this.getHttpOptions());
   }
 
   cargarDatos(idusuario:string): Observable<any> {
-    return this.httpClient.get(this.urlHttp+'/devolverDatos',this.HttpOptions);
+    return this.httpClient.get(this.urlHttp+'/devolverDatos',this.getHttpOptions());
   }
 
   guardarFoto(datoImagen:any): Observable<any> {
-    return this.httpClient.post(this.urlHttp+'/guardarFoto',datoImagen,this.HttpOptions);
+    return this.httpClient.post(this.urlHttp+'/guardarFoto',datoImagen,this.getHttpOptions());
   }
+
   guardarFotoRutina(datoImagen:any): Observable<any> {
-    return this.httpClient.post(this.urlHttp+'/guardarFotoRutina?carpeta=rutinasPrivadas',datoImagen,this.HttpOptions);
+    return this.httpClient.post(this.urlHttp+'/guardarFotoRutina?carpeta=rutinasPrivadas',datoImagen,this.getHttpOptions());
+  }
+
+  generarRutinaUsuario(datos:any): Observable<any>{
+    return this.httpClient.post("http://localhost:3000/gpt/rutinaGenerada",datos,this.getHttpOptions());
+  }
+
+  guardarRutinaUsuario(datos:any): Observable<any>{
+    return this.httpClient.post("http://localhost:3000/gpt/guardarRutinaGenerada",datos,this.getHttpOptions());
   }
 }
 

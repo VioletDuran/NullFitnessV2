@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { VistaPerfilService } from 'src/app/services/VistaPerfil/vista-perfil.service';
 import { ServicioLoginService } from 'src/app/services/Login/servicio-login.service';
 import Swal from 'sweetalert2';
-import {Router} from "@angular/router";
-import { datosModificables,usuarioFinal } from 'src/app/services/VistaPerfil/vista-perfil.type';
+import { Router } from "@angular/router";
+import { datosModificables, usuarioFinal } from 'src/app/services/VistaPerfil/vista-perfil.type';
 import { Rutina } from 'src/app/services/ejerciciosPrivados/ejercicio-privado.type';
 import { NgForm } from '@angular/forms';
+import { AdministradorService } from 'src/app/services/servicioAdmin/administrador.service';
 
 @Component({
   selector: 'app-mi-perfil',
@@ -13,7 +14,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./mi-perfil.component.scss']
 })
 export class MiPerfilComponent implements OnInit {
-  arrayMostrar:Rutina[] = [];
+  arrayMostrar: Rutina[] = [];
   Usuario: usuarioFinal | any = {
     idusuario : "",
     nombreusuario : "",
@@ -27,17 +28,18 @@ export class MiPerfilComponent implements OnInit {
     objetivo: ""
   };
   datosCargados: boolean = false;
-  fileTemp:any;
+  fileTemp: any;
   tipoUsuario: string = "";
-  @ViewChild('fotoRut') formularioRut!:NgForm
-  @ViewChild('fotoUsu') formularioUsu!:NgForm
+  musculosTotales: any;
+  @ViewChild('fotoRut') formularioRut!: NgForm
+  @ViewChild('fotoUsu') formularioUsu!: NgForm
 
-  constructor(private perfil:VistaPerfilService, private estado:ServicioLoginService, private router:Router) { }
+  constructor(private perfil: VistaPerfilService, private estado: ServicioLoginService, private router: Router, private servicio: AdministradorService) { }
 
   ngOnInit(): void {
     //Se cargan los datos en caso de que el usuario tenga el token activo
     this.estado.loggedIn();
-    if(!this.estado.isLoggedIn){
+    if (!this.estado.isLoggedIn) {
       this.router.navigate(['']);
       Swal.fire({
         title: 'No estas logeado',
@@ -49,16 +51,19 @@ export class MiPerfilComponent implements OnInit {
     }
     if(this.datosCargados == false){
       this.perfil.cargarDatos(this.estado.idUsuario).subscribe((valor) =>{
-        console.log(valor);
-
+    if (this.datosCargados == false) {
+      this.servicio.obtenerMusculos().subscribe((valor) => {
+        this.musculosTotales = valor;
+      })
+      this.perfil.cargarDatos(this.estado.idUsuario).subscribe((valor) => {
         this.Usuario = valor;
-        if(this.Usuario.peso != null){
+        if (this.Usuario.peso != null) {
           this.Usuario.peso = this.Usuario.peso + " Kg";
         }
-        if(this.Usuario.edad != null){
+        if (this.Usuario.edad != null) {
           this.Usuario.edad = this.Usuario.edad + " Años";
         }
-        if(this.Usuario.altura != null){
+        if (this.Usuario.altura != null) {
           this.Usuario.altura = this.Usuario.altura + " Cms";
         }
         this.tipoUsuario = this.estado.tipoUsuario;
@@ -67,20 +72,20 @@ export class MiPerfilComponent implements OnInit {
     }
 
     // Se obtienen las rutinas desde la promesa
-    this.perfil.obtenerRutinas(this.estado.idUsuario).subscribe((valor) =>{
+    this.perfil.obtenerRutinas(this.estado.idUsuario).subscribe((valor) => {
       this.arrayMostrar = valor;
     })
   }
 
   //Metodo para cambiar la foto del usuario.
-  cambiarFoto($event:any) {
-    const [ file ] = $event.target.files;
+  cambiarFoto($event: any) {
+    const [file] = $event.target.files;
     let extension = 'jpg';
     let nombreFinal = this.Usuario.idusuario + '.' + extension;
 
     this.fileTemp = {
-      fileRaw:file,
-      fileName:nombreFinal,
+      fileRaw: file,
+      fileName: nombreFinal,
     }
 
     Swal.fire({
@@ -91,25 +96,25 @@ export class MiPerfilComponent implements OnInit {
       cancelButtonText: 'Cancelar',
       showCancelButton: true,
       allowOutsideClick: false,
-      preConfirm:() => {
+      preConfirm: () => {
         this.enviarFoto();
       }
     }).then(() => this.formularioUsu.resetForm())
   }
 
   //Se envia la foto al back para proceder a guardarla.
-  enviarFoto(){
+  enviarFoto() {
 
     const body = new FormData();
     body.append('myFile', this.fileTemp.fileRaw, this.fileTemp.fileName);
-    this.perfil.guardarFoto(body).subscribe((valor)=>{
-      if(valor == true){
+    this.perfil.guardarFoto(body).subscribe((valor) => {
+      if (valor == true) {
         Swal.fire({
           title: "Foto cambiada con exito!",
           icon: "success",
           confirmButtonText: 'Aceptar',
           confirmButtonColor: 'green',
-          preConfirm:() => {
+          preConfirm: () => {
             location.reload();
           }
         })
@@ -120,7 +125,7 @@ export class MiPerfilComponent implements OnInit {
 
 
   //Se ciera la sesion del usuario
-  cerrarSesion(){
+  cerrarSesion() {
     this.estado.logout();
     this.router.navigate(['']);
     Swal.fire({
@@ -131,8 +136,90 @@ export class MiPerfilComponent implements OnInit {
     })
   }
 
+  recomendacion(idRutina: any) {
+    Swal.fire({
+      title: "Datos para generar recomendación",
+      html: `<hr>
+            <a>Recuerda rellenar tu informacion para hacer la rutina mas exacta</a>
+            <hr>
+            <form class = "text-start mx-5">
+            <select class="swal2-input" id="intensidad" name="intensidad" style="width: 17rem"">
+            <option value="preter" id ="preter">Seleccionar intensidad</option>
+            <option value="Baja" id ="BajarPeso">Baja</option>
+            <option value="Media" id ="MantenerPeso">Media</option>
+            <option value="Alta" id ="GanarMasaMus">Alta</option>
+            </select>
+            <hr>
+            <strong>Seleccionar musculos a entrenar</strong>
+            <br>
+            <hr>
+            ${this.musculosTotales.map((musclo: any) => {
+        return `
+            <input type="checkbox" id="${musclo.idmusculo}" name="${musclo.idmusculo}" value="${musclo.idmusculo}">
+            <label for="${musclo.idmusculo}">${musclo.musculo}</label><br>
+            `
+      }).flat().join('')}
+        </form>`,
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: 'green',
+      showCancelButton: true,
+      preConfirm: () => {
+        const intensidad = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#intensidad'))?.value;
+        let musculosSeleccionados: String[] = [];
+        for (let i = 0; i < this.musculosTotales.length; i++) {
+          if ((<HTMLInputElement | null>document.getElementById(this.musculosTotales[i].idmusculo))?.checked) {
+            musculosSeleccionados.push(this.musculosTotales[i].musculo);
+          }
+        }
+
+        if (intensidad == "preter") {
+          Swal.showValidationMessage(`Porfavor elija una intensidad valida`);
+        } else if (musculosSeleccionados.length == 0) {
+          Swal.showValidationMessage(`Debe seleccionar por lo menos un musculo`);
+        } else {
+          Swal.fire({
+            title: "Estamos generando tu rutina, esto puede tomar un tiempo, te autodirigiremos a la rutina una vez creada.",
+            html: '<img src="../../../assets/img/VAyR.gif" alt="Cargando..." />',
+            showConfirmButton: false,
+            allowOutsideClick: false
+          })
+          let infoGeneracion = {
+            edad: this.Usuario.edad,
+            peso: this.Usuario.peso,
+            altura: this.Usuario.altura,
+            genero: this.Usuario.genero,
+            objetivo: this.Usuario.objetivo,
+            experiencia: this.Usuario.experiencia,
+            intensidad: intensidad,
+            musculos: musculosSeleccionados,
+          }
+          this.perfil.generarRutinaUsuario(infoGeneracion).subscribe((valor) => {
+            let datosRutina = {
+              idRutina: idRutina,
+              datos: JSON.parse(valor.content).Rutina,
+              musculos: musculosSeleccionados
+            }
+
+            this.perfil.guardarRutinaUsuario(datosRutina).subscribe((respuesta) => {
+                this.router.navigate(['/MisEjercicios', idRutina]);
+                Swal.close();
+            }, (error) =>{
+              Swal.fire({
+                title: 'Hubo un error, intente de nuevo!',
+                text: error.error.msg,
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: "#6D0101"
+              })
+            })
+          })
+        }
+      }
+    })
+  }
+
   //Pop up para obtener la informacion del usuario a editar.
-  editarInformacion(){
+  editarInformacion() {
     Swal.fire({
       title: "Informacion de usuario",
       text: "Ingresa la informacion para editar.",
@@ -140,7 +227,6 @@ export class MiPerfilComponent implements OnInit {
              <input type="number" class="swal2-input" placeholder="Edad" id="edad">
              <hr>
              <input type="number" class="swal2-input" placeholder="Peso (Kg)" id = "peso">
-
              <hr>
              <select class="swal2-input" id="objetivo" name="objetivo" style="width: 17rem"">
              <option value="preter" id ="preter">Seleccionar objetivo</option>
@@ -174,77 +260,74 @@ export class MiPerfilComponent implements OnInit {
       confirmButtonText: 'Confirmar',
       confirmButtonColor: 'green',
       cancelButtonText: 'Cancelar',
-      preConfirm: () =>{
+      preConfirm: () => {
 
-        const edad = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#edad'))?.value;
+        const edad = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#edad'))?.value;
         let edadUsuario = Number(edad);
 
-        const peso = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#peso'))?.value;
+        const peso = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#peso'))?.value;
         let pesoUsuario = Number(peso);
 
-        const objetivo = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#objetivo'))?.value;
+        const objetivo = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#objetivo'))?.value;
         let objetivoUsuario = document.getElementById(objetivo!)!.textContent
 
-        const genero = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#genero'))?.value;
+        const genero = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#genero'))?.value;
         let generoUsuario = document.getElementById(genero!)!.textContent
 
-        const altura = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#altura'))?.value;
+        const altura = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#altura'))?.value;
         let alturaUsuario = Number(altura);
 
-        const experiencia = (<HTMLInputElement | null> Swal.getPopup()?.querySelector('#experiencia'))?.value;
+        const experiencia = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#experiencia'))?.value;
         let experienciaUsuario = document.getElementById(experiencia!)!.textContent
 
 
-        if(edadUsuario < 16 || edadUsuario > 99){
+        if (edadUsuario < 16 || edadUsuario > 99) {
           Swal.showValidationMessage(`Porfavor ingresa una edad valida entre 16 y 99 años`);
         }
-        else if(pesoUsuario < 40 || pesoUsuario > 300 )
-        {
+        else if (pesoUsuario < 40 || pesoUsuario > 300) {
           Swal.showValidationMessage(`Porfavor ingresa un peso valido entre 40 y 300 kg`);
         }
-        else if(objetivo == "preter"){
+        else if (objetivo == "preter") {
           Swal.showValidationMessage(`Porfavor elija un objetivo valido`);
         }
-        else if(genero == "preter"){
+        else if (genero == "preter") {
           Swal.showValidationMessage(`Porfavor elija un genero valido`);
-        }else if(alturaUsuario < 120 || alturaUsuario > 300){
+        } else if (alturaUsuario < 120 || alturaUsuario > 300) {
           Swal.showValidationMessage(`Porfavor elija una altura entre 120 a 300 cms`);
-        }else if(experiencia == "preter"){
+        } else if (experiencia == "preter") {
           Swal.showValidationMessage(`Porfavor elija una experiencia valida`);
-        }else{
-          let datosUsuario: datosModificables  = {
+        } else {
+          let datosUsuario: datosModificables = {
             idusuario: this.estado.idUsuario,
             edad: edad!,
             peso: peso!,
             objetivo: objetivoUsuario!,
             genero: generoUsuario!,
             altura: altura!,
-            experiencia:experienciaUsuario!
+            experiencia: experienciaUsuario!
           }
 
-          console.log(datosUsuario);
 
-          this.perfil.actualizarInformacionUsuario(datosUsuario).subscribe((valor) =>
-            {
-              if(valor == true){
-                Swal.fire({
-                  title: 'Modificacion Correcta',
-                  text: 'Se modifico tu informacion correctamente.',
-                  icon: 'success',
-                  confirmButtonText: 'Aceptar',
-                  confirmButtonColor: 'green',
-                  preConfirm: () => {
-                     location.reload();
-                  }
-                })
-            }else{
+          this.perfil.actualizarInformacionUsuario(datosUsuario).subscribe((valor) => {
+            if (valor == true) {
+              Swal.fire({
+                title: 'Modificacion Correcta',
+                text: 'Se modifico tu informacion correctamente.',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: 'green',
+                preConfirm: () => {
+                  location.reload();
+                }
+              })
+            } else {
               Swal.fire({
                 title: 'Hubo un error en la actualizacion',
                 icon: 'error',
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: 'red',
                 preConfirm: () => {
-                   location.reload();
+                  location.reload();
                 }
               })
             }
@@ -253,13 +336,13 @@ export class MiPerfilComponent implements OnInit {
       }
     })
   }
-  cambiarFotoPriv($event: any,idrutinas:any) {
-    const [ file ] = $event.target.files;
+  cambiarFotoPriv($event: any, idrutinas: any) {
+    const [file] = $event.target.files;
     let extension = 'jpg';
     let nombreFinal = idrutinas + '_rutinaPriv' + '.' + extension;
     this.fileTemp = {
-      fileRaw:file,
-      fileName:nombreFinal,
+      fileRaw: file,
+      fileName: nombreFinal,
     }
     Swal.fire({
       title: 'Deseas confirmar el archivo?',
@@ -269,26 +352,25 @@ export class MiPerfilComponent implements OnInit {
       cancelButtonText: 'Cancelar',
       showCancelButton: true,
       allowOutsideClick: false,
-      preConfirm:() => {
+      preConfirm: () => {
         this.enviarFotoRutina();
       }
-    }).then(()=>
-     {
+    }).then(() => {
       this.formularioRut.resetForm();
-     })
+    })
   }
 
   enviarFotoRutina() {
     const body = new FormData();
     body.append('myFile', this.fileTemp.fileRaw, this.fileTemp.fileName);
-    this.perfil.guardarFotoRutina(body).subscribe((valor)=>{
-      if(valor == true){
+    this.perfil.guardarFotoRutina(body).subscribe((valor) => {
+      if (valor == true) {
         Swal.fire({
           title: "Foto cambiada con exito!",
           icon: "success",
           confirmButtonText: 'Aceptar',
           confirmButtonColor: 'green',
-          preConfirm:() => {
+          preConfirm: () => {
             location.reload();
           }
         })

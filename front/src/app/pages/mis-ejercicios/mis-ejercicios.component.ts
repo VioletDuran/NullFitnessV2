@@ -52,7 +52,7 @@ export class MisEjerciciosComponent implements OnInit {
         this.ejerciciosUsuario[i].repeticiones = this.idEjerciciosUsuario[i].repeticiones;
         this.ejerciciosUsuario[i].tiempo = this.idEjerciciosUsuario[i].tiempo;
       }
-      console.log(this.ejerciciosUsuario)
+  
       this.datosCargados = true;
     })
   }

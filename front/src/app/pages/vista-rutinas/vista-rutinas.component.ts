@@ -15,7 +15,7 @@ export class VistaRutinasComponent implements OnInit {
   ngOnInit(): void {
     this.arrayRutinasAux.devolverRutinasPublicas().subscribe((valor) =>{
       this.arrayRutinas = valor;
-      console.log(this.arrayRutinas);
+
       this.datosCargados = true;
     })
   }
