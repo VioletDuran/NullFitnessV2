@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs";
+import { ConfigService } from '../configRutas/config.service';
 
 
 @Injectable({
@@ -8,10 +9,10 @@ import {Observable} from "rxjs";
 })
 
 export class RutinasPublicasService {
-  urlHttp:string = "http://localhost:3000/users";
-  constructor(private httpCliente: HttpClient) {
+  constructor(private httpCliente: HttpClient,private config: ConfigService) {
   }
   devolverRutinasPublicas(): Observable<any>{
-    return this.httpCliente.get(this.urlHttp + '/devolverRutinasPublicas/1');
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/devolverRutinasPublicas';
+    return this.httpCliente.get(url);
   }
 }

@@ -5,11 +5,11 @@ const upload = require('../middlewares/upload')
 const {devolverRutinas,devolverRutinasEspecifica,obtenerEjerciciosPrivados,devolverRutinasPublicas,obtenerEjerciciosPrivadoUsuario,anadirEjercicioARutina,guardarFotoRutina,guardarFotoRutinaPub,guardarNuevaRutinaPub,anadirEjercicioCardio,editarInfoRutinaPriv,modificarRutinas,eliminarEjercicioDeRutina,eliminarRutinasPub} = require('../controllers/rutina.controller')
 
 //GETS
-rutina.get('/devolverRutinas',userExtractor, devolverRutinas); //Devolver rutina privada de usuario 
 rutina.get('/devolverRutinasEspecifica/:id',devolverRutinasEspecifica); //Devolver rutina en especifico - RUTA: rutina
 rutina.get('/obtenerEjerciciosPrivados/:id',obtenerEjerciciosPrivados); //Devolver ejercicios espeficificos de una rutina - RUTA: rutina
-rutina.get('/devolverRutinasPublicas',devolverRutinasPublicas); //Devolver todas las rutinas publcas - RUTA: rutina
 rutina.get('/obtenerEjerciciosPrivadoUsuario/:id',obtenerEjerciciosPrivadoUsuario); //Devoler ejercicios de una rutina en especifico - RUTA: rutina 
+rutina.get('/devolverRutinas',userExtractor, devolverRutinas); //Devolver rutina privada de usuario 
+rutina.get('/devolverRutinasPublicas',devolverRutinasPublicas); //Devolver todas las rutinas publcas - RUTA: rutina
 
 //POST
 rutina.post('/anadirEjercicio',userExtractor,anadirEjercicioARutina); //Agregar un ejercicio a una rutina - RUTA: rutina 

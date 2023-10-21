@@ -5,10 +5,10 @@ const {obtenerEjerciciosTotales,devolverCoincidencias,obtenerMusculosTotales,obt
 const upload = require('../middlewares/upload')
 
 //GETS
-ejercicio.get('/obtenerEjerciciosTotales',obtenerEjerciciosTotales); //Devolver todos los ejercicios junto a sus musculos - RUTINA: ejercicios
 ejercicio.get('/devolverCoincidencias/:coincidencia',devolverCoincidencias);
-ejercicio.get('/obtenerMusculosTotales',obtenerMusculosTotales); //Devolver todos los musculos de un ejercicio - RUTA: ejercicio
 ejercicio.get('/obtenerMusculosEjercicios/:id',userExtractor,obtenerMusculosEjercicios) //Devolver los musculos de un ejercicio en espeficico (ANTES SE LLAMABA ES CARDIO) - RUTA: ejercicio
+ejercicio.get('/obtenerEjerciciosTotales',obtenerEjerciciosTotales); //Devolver todos los ejercicios junto a sus musculos - RUTINA: ejercicios
+ejercicio.get('/obtenerMusculosTotales',obtenerMusculosTotales); //Devolver todos los musculos de un ejercicio - RUTA: ejercicio
 
 //POST
 ejercicio.post('/guardarFotoEjercicio',userExtractor,upload.single("myFile"),guardarFotoEjercicio); //Agregar foto de ejercicio - RUTA: ejercicio 

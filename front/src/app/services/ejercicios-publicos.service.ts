@@ -3,6 +3,7 @@ import { EjerciciosPublicosAux } from "./ejercicios-publicos.type";
 //import ejercicios from '../../assets/datos/ejercicios.json';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+import { ConfigService } from './configRutas/config.service';
 
 
 @Injectable({
@@ -11,14 +12,15 @@ import {Observable} from "rxjs";
 
 
 export class EjerciciosPublicosService {
-  urlHttp:string = "http://localhost:3000/users";
-  constructor(private httpClient:HttpClient) {
+
+  constructor(private httpClient:HttpClient,private config: ConfigService) {
   }
   ngOnInit(): void {
   }
 
   devolverEjercicios(): Observable<any>{
-    return this.httpClient.get(this.urlHttp + "/obtenerEjerciciosTotales/1");
+    let url = this.config.mainUrl + this.config.ejercicioUrl + "/obtenerEjerciciosTotales"
+    return this.httpClient.get(url);
   }
 
 

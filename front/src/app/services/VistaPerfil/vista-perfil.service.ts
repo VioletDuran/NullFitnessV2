@@ -4,6 +4,7 @@ import { vistaPerfil } from './vista-perfil.type';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from "rxjs";
 import { datosModificables } from './vista-perfil.type';
+import { ConfigService } from '../configRutas/config.service';
 
 
 @Injectable({
@@ -13,7 +14,7 @@ export class VistaPerfilService {
   url:string = '../../../assets/datos/misRutinas.json';
   urlHttp:string = "http://localhost:3000/users";
 
-  constructor(private httpClient:HttpClient) {
+  constructor(private httpClient:HttpClient,private config: ConfigService) {
   }
 
   ngOnInit(): void {
@@ -32,7 +33,8 @@ export class VistaPerfilService {
   }
 
   obtenerRutinas(idusuario:string): Observable<any>{
-    return this.httpClient.get(this.urlHttp +'/devolverRutinas',this.getHttpOptions());
+    let url = this.config.mainUrl + this.config.rutinasUrl +'/devolverRutinas';
+    return this.httpClient.get(url,this.getHttpOptions());
   }
 
   encontrarRutina(id:string | any, rutinas:vistaPerfil[]){
@@ -52,7 +54,8 @@ export class VistaPerfilService {
   }
 
   guardarFotoRutina(datoImagen:any): Observable<any> {
-    return this.httpClient.post(this.urlHttp+'/guardarFotoRutina?carpeta=rutinasPrivadas',datoImagen,this.getHttpOptions());
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/guardarFotoRutina?carpeta=rutinasPrivadas';
+    return this.httpClient.post(url,datoImagen,this.getHttpOptions());
   }
 
   generarRutinaUsuario(datos:any): Observable<any>{

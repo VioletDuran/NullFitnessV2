@@ -2,39 +2,44 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {RutinaEjericio} from "./ejercicio-privado.type";
+import { ConfigService } from '../configRutas/config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EjercicioPrivadoService {
-  url: String = "http://localhost:3000/users";
-  private HttpOptions = {
-		headers: new HttpHeaders({
-			token: localStorage.getItem('token') || '',
-		}),
-	};
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient,private config: ConfigService) { }
+
+  private getHttpOptions() {
+    return {
+        headers: new HttpHeaders({
+            token: localStorage.getItem('token') || '',
+        }),
+    };
+  }
 
   obtenerEjerciciosPrivados(idRutina:any): Observable<any>{
-    let url = '/obtenerEjerciciosPrivados/' + idRutina;
-    return this.httpClient.get("http://localhost:3000/users" + url,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/obtenerEjerciciosPrivados/' + idRutina;
+    return this.httpClient.get(url,this.getHttpOptions());
   }
 
   obtenerEjerciciosPrivadoUsuario(idRutina:any): Observable<any>{
-    let url = '/obtenerEjerciciosPrivadoUsuario/' + idRutina;
-    return this.httpClient.get("http://localhost:3000/users" + url,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/obtenerEjerciciosPrivadoUsuario/' + idRutina
+    return this.httpClient.get(url,this.getHttpOptions());
   }
 
   obtenerEjerciciosTotales(): Observable<any>{
-    return this.httpClient.get("http://localhost:3000/users" + "/obtenerEjerciciosTotales/1");
+    let url = this.config.mainUrl + this.config.ejercicioUrl + "/obtenerEjerciciosTotales"
+    return this.httpClient.get(url);
   }
 
   devolverRutinasEspecifica(id:any): Observable<any>{
-    let url = 'devolverRutinasEspecifica/' + id;
-    return this.httpClient.get("http://localhost:3000/users/" + url,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/devolverRutinasEspecifica/' + id
+    return this.httpClient.get("http://localhost:3000/users/" + url,this.getHttpOptions());
   }
 
   eliminarEjercicioDeRutina(rutinaEjericioEliminar:any){
+    let url = this.config.mainUrl + this.config.rutinasUrl + "/dataEliminarEjercicioRutina";
     let idRutinaEjercicio: RutinaEjericio = rutinaEjericioEliminar;
     let Options = {
       headers: new HttpHeaders({
@@ -43,35 +48,42 @@ export class EjercicioPrivadoService {
       }),
       body:idRutinaEjercicio
     }
-    this.httpClient.delete(this.url+"/dataEliminarEjercicioRutina",Options).subscribe()
+    this.httpClient.delete(url,Options).subscribe()
   }
 
   añadirEjercicioRutina(ejercicioAñadir:any): Observable<any>{
-    return this.httpClient.post('http://localhost:3000/users/anadirEjercicio',ejercicioAñadir,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/anadirEjercicio';
+    return this.httpClient.post(url,ejercicioAñadir,this.getHttpOptions());
   }
 
   revisarExisteEjercicio(ejercicio:any): Observable<any>{
-    return this.httpClient.post('http://localhost:3000/users/revisarEjercicioRutina',ejercicio,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.ejercicioUrl + '/revisarEjercicioRutina';
+    return this.httpClient.post('http://localhost:3000/users/revisarEjercicioRutina',ejercicio,this.getHttpOptions());
   }
   
   editarInfoRutinaPriv(informacion:any): Observable<any>{
-    return this.httpClient.put('http://localhost:3000/users/editarInfoRutinaPriv',informacion,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/editarInfoRutinaPriv';
+    return this.httpClient.put(url,informacion,this.getHttpOptions());
   }
 
   esCardio(id:any): Observable<any>{
-    return this.httpClient.get('http://localhost:3000/users/esCardio/' + id,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.ejercicioUrl + "/obtenerMusculosEjercicios/" + id;
+    return this.httpClient.get(url,this.getHttpOptions());
   }
 
   añadirEjercicioCardio(datos:any): Observable<any>{
-    return this.httpClient.post('http://localhost:3000/users/anadirEjercicioCardio',datos,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/anadirEjercicioCardio';
+    return this.httpClient.post(url,datos,this.getHttpOptions());
   }
 
   modificarTiempo(datos:any): Observable<any>{
-    return this.httpClient.put('http://localhost:3000/users/modificarTiempo',datos,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.ejercicioUrl + '/modificarTiempo';
+    return this.httpClient.put(url,datos,this.getHttpOptions());
   }
 
   modificarCarga(datos:any): Observable<any>{
-    return this.httpClient.put('http://localhost:3000/users/modificarCarga',datos,this.HttpOptions);
+    let url = this.config.mainUrl + this.config.ejercicioUrl + '/modificarCarga';
+    return this.httpClient.put(url,datos,this.getHttpOptions());
   }
 
 }
