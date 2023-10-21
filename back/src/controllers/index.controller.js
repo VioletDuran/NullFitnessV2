@@ -89,7 +89,6 @@ const modificarDatos =  async (req, res) => {
         const {idusuario, edad, peso, objetivo, genero, altura, experiencia} = req.body;
         const response = await pool.query('UPDATE usuarios SET edad = $2,peso = $3, objetivo = $4, genero = $5, altura = $6, experiencia = $7 WHERE idusuario = $1',[idusuario, edad, peso, objetivo, genero, altura, experiencia])
         pool.end;
-        console.log(req.body);
         if(response){
             res.status(200).send(true);
         }
@@ -306,7 +305,6 @@ const anadirEjercicioCardio = async(req,res) =>{
         if(response){
             return res.status(200).send(true);
         }
-        console.log("HOLA");
     } catch (error) {
         console.log(error);
     }

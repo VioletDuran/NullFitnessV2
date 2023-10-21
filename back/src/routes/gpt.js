@@ -1,8 +1,9 @@
 const { Router } = require('express');
 const gpt = Router();
-const {generarRecomendacion} = require('../controllers/gpt.controller')
+const {generarRecomendacion,guardarRutina} = require('../controllers/gpt.controller')
 
 
-gpt.get('/rutinaGenerada',generarRecomendacion);
+gpt.post('/rutinaGenerada',generarRecomendacion);
+gpt.post('/guardarRutinaGenerada',guardarRutina);
 
 module.exports = gpt
