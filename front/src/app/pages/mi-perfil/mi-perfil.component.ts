@@ -16,14 +16,14 @@ import { AdministradorService } from 'src/app/services/servicioAdmin/administrad
 export class MiPerfilComponent implements OnInit {
   arrayMostrar: Rutina[] = [];
   Usuario: usuarioFinal | any = {
-    idusuario: "",
-    nombreusuario: "",
-    edad: "",
-    nombre: "",
-    foto: "",
-    peso: "",
-    experiencia: "",
-    altura: "",
+    idusuario : "",
+    nombreusuario : "",
+    edad : "",
+    nombre : "",
+    foto : "",
+    peso : "",
+    experiencia : "",
+    altura : "",
     genero: "",
     objetivo: ""
   };
@@ -49,6 +49,8 @@ export class MiPerfilComponent implements OnInit {
         confirmButtonColor: 'green'
       })
     }
+    if(this.datosCargados == false){
+      this.perfil.cargarDatos(this.estado.idUsuario).subscribe((valor) =>{
     if (this.datosCargados == false) {
       this.servicio.obtenerMusculos().subscribe((valor) => {
         this.musculosTotales = valor;

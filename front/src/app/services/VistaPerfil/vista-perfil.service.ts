@@ -13,7 +13,6 @@ export class VistaPerfilService {
   url:string = '../../../assets/datos/misRutinas.json';
   urlHttp:string = "http://localhost:3000/users";
 
-
   constructor(private httpClient:HttpClient) {
   }
 

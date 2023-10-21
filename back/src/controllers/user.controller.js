@@ -6,51 +6,29 @@ const fotoOriginal = "../../../assets/img/usuario.png"
 
 const registrarUsuario = async (req, res, next) => {
     try {
-        const { nombre, nombreUsuario, edad, correo, contraseña} = req.body;
-        let auxContraseña =  bcrypt.hashSync(contraseña, 10, (err, hash) => {
-            if (err) throw (err)
-            contraseña = hash;
-        });
-        try {
-            await pool
-                .query('select idusuario from usuarios where correo = $1',[correo])
-                .then(results => {
-                    if(results.rows.length > 0){
-                        res.status(409).send(false)
-                    } else {
-                        pool
-                            .query('INSERT INTO usuarios (tipousuario, correo, contraseña, nombreusuario, edad, nombre, foto) VALUES ($1, $2, $3, $4, $5, $6, $7)', [1,correo,auxContraseña,nombreUsuario,edad,nombre, fotoOriginal])
-                            .then(results => {
-                                pool
-                                .query('select idusuario from usuarios where correo = $1',[correo])
-                                .then(results => {
-                                    const idUsuario = results.rows[0]
-                                    crearRutinas(idUsuario);
-                                    res.status(200).send(true)
-                                })
-                                .catch(error => res.status(400).json({msg: error.message}))
-                            })
-                            .catch(error => res.status(400).json({msg: error.message}))
-                    }
-                })
-                .catch()
-        } catch (error){
-            next(error)
+        const { nombre, nombreUsuario, edad, correo, contraseña } = req.body;
+        const auxContraseña = bcrypt.hashSync(contraseña, 10); 
+        const responseCorreo = await pool.query('select idusuario from usuarios where correo = $1', [correo]);
+        if (responseCorreo.rows.length > 0) {
+            return res.status(409).send({msg:'Error ese correo ya se encuentra registrado'});
         }
+        await pool.query('INSERT INTO usuarios (tipousuario, correo, contraseña, nombreusuario, edad, nombre, foto) VALUES ($1, $2, $3, $4, $5, $6, $7)', [1, correo, auxContraseña, nombreUsuario, edad, nombre, fotoOriginal]);
+        const responseId = await pool.query('select idusuario from usuarios where correo = $1', [correo]);
+        const idUsuario = responseId.rows[0];
+        crearRutinas(idUsuario);
+        return res.status(200).send({msg:'Se creado su cuenta con exito!'});
     } catch (error) {
-        return res.send(false)
+        console.error(error); 
+        return res.status(500).send(false); 
     }
 }
 
 const loginUsuario = async (req, res) => {
     const { correo, contraseña } = req.body;
-
     try {
         const results = await pool.query('select idusuario,contraseña,tipousuario from usuarios where correo = $1', [correo]);
-
         if (results.rows.length > 0) {
             const user = results.rows[0];
-
             if (bcrypt.compareSync(contraseña, user.contraseña)) {
                 delete user.contraseña;
                 const token = jwt.sign({
@@ -64,6 +42,7 @@ const loginUsuario = async (req, res) => {
             return res.status(404).send({msg: 'Correo no registrado'});
         }
     } catch (error) {
+        console.log(error);
         return res.status(500).send({msg: 'Hubo un error no esperado'});
     }
 }
@@ -74,7 +53,6 @@ const crearRutinas = async (idUsuario) =>{
         let fotoNormal = "../../../assets/img/mirutina1.jpg";
         let descripcion = "Rutina preestablecida"
         await pool.query('INSERT INTO rutinas (titulorutina, foto, descripcion,idusuario) VALUES ($1, $2, $3, $4)',[nombreRutina, fotoNormal, descripcion, idUsuario["idusuario"]]);
-        pool.end;
     }
     generarEjerciciosBasicos(idUsuario);
     return;
@@ -91,7 +69,6 @@ const generarEjerciciosBasicos = async(idUsuario) =>{
         await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],5]);
         await pool.query('INSERT INTO rutinas_ejercicios(idrutinas, idejercicios) VALUES ($1,$2)',[rutinas.rows[i]["idrutinas"],6]);
     }
-    pool.end;
     return;
 }
 
@@ -101,7 +78,48 @@ const guardarFoto = async (req, res) => {
   file = "http://localhost:3000/" + file;
   await pool.query('UPDATE usuarios SET foto = $1 where idusuario = $2', [file,id[0]]);
   pool.end;
-  res.send(true);
+  res.status(200).send(true);
 }
 
-module.exports = {registrarUsuario,loginUsuario,guardarFoto}
+const devolverDatos =  async (req, res) => {
+    try {
+        let id = req.idusuario.idusuario;
+        const response = await pool.query('select idusuario, nombreusuario, edad, nombre, foto, peso, experiencia, altura, genero, objetivo from usuarios where idusuario = $1',[id]);
+        let resultado = response.rows[0];
+        return res.json(resultado);
+    } catch (error) {
+        console.log(error)
+        return res.status(404);
+    }
+}
+
+const revisarCorreo =  async (req, res) => {
+    try {
+        const correo = req.params.correo;
+        const response = await pool.query('select correo from usuarios where correo = $1',[correo]);
+        if(response.rows.length == 1){
+            return res.status(409).send({msg:'El correo ya se encuentra registrado.'});
+        }else{
+           return  res.status(200).send({msg:'La cuenta se creo de manera correcta.'}); 
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500)
+    }
+}
+
+const modificarDatos =  async (req, res) => {
+    try {
+        const {idusuario, edad, peso, objetivo, genero, altura, experiencia} = req.body;
+        const response = await pool.query('UPDATE usuarios SET edad = $2,peso = $3, objetivo = $4, genero = $5, altura = $6, experiencia = $7 WHERE idusuario = $1',[idusuario, edad, peso, objetivo, genero, altura, experiencia])
+        pool.end;
+        console.log(req.body);
+        if(response){
+            res.status(200).send(true);
+        }
+    } catch (error) {
+        res.status(200).send(false);
+    }
+}
+
+module.exports = {registrarUsuario,loginUsuario,guardarFoto,devolverDatos,revisarCorreo,modificarDatos}
