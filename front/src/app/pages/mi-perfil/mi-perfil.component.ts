@@ -177,7 +177,7 @@ export class MiPerfilComponent implements OnInit {
         } else {
           Swal.fire({
             title: "Estamos generando tu rutina, esto puede tomar un tiempo, te autodirigiremos a la rutina una vez creada.",
-            html: '<img src="../../../assets/img/VAyR.gif" alt="Cargando..." />',
+            html: '<img src="../../../assets/img/pesos-academia.gif" alt="Cargando..." style="width: 300px; height: 200px;"/>',
             showConfirmButton: false,
             allowOutsideClick: false
           })
@@ -197,7 +197,6 @@ export class MiPerfilComponent implements OnInit {
               datos: JSON.parse(valor.content).Rutina,
               musculos: musculosSeleccionados
             }
-
             this.perfil.guardarRutinaUsuario(datosRutina).subscribe((respuesta) => {
               this.router.navigate(['/MisEjercicios', idRutina]);
               Swal.close();
@@ -209,6 +208,14 @@ export class MiPerfilComponent implements OnInit {
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: "#6D0101"
               })
+            })
+          }, (error) => {
+            Swal.fire({
+              title: 'Hubo un error, intente de nuevo!',
+              text: error.error.msg,
+              icon: 'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: "#6D0101"
             })
           })
         }

@@ -52,11 +52,16 @@ const generarRecomendacion = async(req,res) =>{
     if(prompt == "Error"){
         res.status(444).send({msg: "Error al consultar base de datos"});
     }else{
-        const chatCompletion = await openai.chat.completions.create({
-            model: "gpt-4",
-            messages: [{"role": "user", "content": prompt}],
-        });
-        res.status(200).send(chatCompletion.choices[0].message);
+        try {
+            const chatCompletion = await openai.chat.completions.create({
+                model: "gpt-4",
+                messages: [{"role": "user", "content": prompt}],
+            });
+            res.status(200).send(chatCompletion.choices[0].message);
+        } catch (error) {
+            console.log(error);
+            res.status(444).send({msg: "Pasó un error inesperado."});
+        }
     }
 }
 

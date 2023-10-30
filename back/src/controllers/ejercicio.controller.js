@@ -82,7 +82,7 @@ const guardarFotoEjercicio = async(req,res) =>{
 const guardarNuevoEjercicio = async (req, res) => {
     try {
         const { tituloejercicio, descripcion, video, musculos } = req.body;
-        const validVideo = video && video.includes('youtube') ? video : "https://www.youtube.com/embed/gc2iRcz9IPs";
+        const validVideo = video && video.includes('youtube') ? video : "https://www.youtube.com/embed/lTgcSxC-Qrs?si=UbQk8EhHZufSn6p-";
         await pool.query('BEGIN');
         const ejercicioResult = await pool.query(
             'INSERT INTO ejercicios(tituloejercicio, titulofoto, descripcion, video, foto) VALUES($1, $1, $2, $3, $4) RETURNING idejercicio',

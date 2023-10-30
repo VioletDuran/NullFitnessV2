@@ -35,7 +35,7 @@ export class EjercicioPrivadoService {
 
   devolverRutinasEspecifica(id:any): Observable<any>{
     let url = this.config.mainUrl + this.config.rutinasUrl + '/devolverRutinasEspecifica/' + id
-    return this.httpClient.get("http://localhost:3000/users/" + url,this.getHttpOptions());
+    return this.httpClient.get(url,this.getHttpOptions());
   }
 
   eliminarEjercicioDeRutina(rutinaEjericioEliminar:any){
