@@ -169,7 +169,6 @@ export class MiPerfilComponent implements OnInit {
             musculosSeleccionados.push(this.musculosTotales[i].musculo);
           }
         }
-
         if (intensidad == "preter") {
           Swal.showValidationMessage(`Porfavor elija una intensidad valida`);
         } else if (musculosSeleccionados.length == 0) {
@@ -191,15 +190,25 @@ export class MiPerfilComponent implements OnInit {
             intensidad: intensidad,
             musculos: musculosSeleccionados,
           }
-          this.perfil.generarRutinaUsuario(infoGeneracion).subscribe((valor) => {
-            let datosRutina = {
-              idRutina: idRutina,
-              datos: JSON.parse(valor.content).Rutina,
-              musculos: musculosSeleccionados
-            }
-            this.perfil.guardarRutinaUsuario(datosRutina).subscribe((respuesta) => {
-              this.router.navigate(['/MisEjercicios', idRutina]);
-              Swal.close();
+          this.perfil.revisarCantidad().subscribe((valor) => {
+            this.perfil.generarRutinaUsuario(infoGeneracion).subscribe((valor) => {
+              let datosRutina = {
+                idRutina: idRutina,
+                datos: JSON.parse(valor.content).Rutina,
+                musculos: musculosSeleccionados
+              }
+              this.perfil.guardarRutinaUsuario(datosRutina).subscribe((respuesta) => {
+                this.router.navigate(['/MisEjercicios', idRutina]);
+                Swal.close();
+              }, (error) => {
+                Swal.fire({
+                  title: 'Hubo un error, intente de nuevo!',
+                  text: error.error.msg,
+                  icon: 'error',
+                  confirmButtonText: 'Aceptar',
+                  confirmButtonColor: "#6D0101"
+                })
+              })
             }, (error) => {
               Swal.fire({
                 title: 'Hubo un error, intente de nuevo!',
@@ -209,10 +218,10 @@ export class MiPerfilComponent implements OnInit {
                 confirmButtonColor: "#6D0101"
               })
             })
-          }, (error) => {
+          }, (error) =>{
             Swal.fire({
-              title: 'Hubo un error, intente de nuevo!',
-              text: error.error.msg,
+              title: 'Error!',
+              text: error.error.error,
               icon: 'error',
               confirmButtonText: 'Aceptar',
               confirmButtonColor: "#6D0101"

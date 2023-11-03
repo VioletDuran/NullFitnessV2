@@ -65,5 +65,9 @@ export class VistaPerfilService {
   guardarRutinaUsuario(datos:any): Observable<any>{
     return this.httpClient.post("http://localhost:3000/gpt/guardarRutinaGenerada",datos,this.getHttpOptions());
   }
+
+  revisarCantidad(): Observable<any>{
+    return this.httpClient.post(this.urlHttp + "/consultarCantidad",{},this.getHttpOptions());
+  }
 }
 
