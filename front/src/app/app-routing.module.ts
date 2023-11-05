@@ -10,6 +10,8 @@ import { RegistroComponent } from './pages/registro/registro.component';
 import { MisEjerciciosComponent } from './pages/mis-ejercicios/mis-ejercicios.component';
 import { AdministradorComponent } from './pages/administrador/administrador/administrador.component';
 import { EjerciciosRutinasPublicosComponent } from './pages/ejerciciosRutinasPublicos/ejercicios-rutinas-publicos/ejercicios-rutinas-publicos.component';
+import { AcercaDeComponent } from './pages/acerca-de/acerca-de.component';
+
 const routes: Routes = [
   {path:'Ejercicios',component:VistaEjerciciosComponent},
   {path:'Rutinas',component:VistaRutinasComponent},
@@ -20,6 +22,7 @@ const routes: Routes = [
   {path:'MisEjercicios/:id', component:MisEjerciciosComponent},
   {path:'Administrador',component:AdministradorComponent},
   {path:'EjerciciosRutinasPublicas/:id',component:EjerciciosRutinasPublicosComponent},
+  {path:'AcercaDe',component:AcercaDeComponent},
   {path:'',component:MainpageComponent},
   {path:'**',redirectTo:''}
 ];

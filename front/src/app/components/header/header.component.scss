@@ -1,3 +1,9 @@
 .pos{
     z-index: 1000;
 }
+
+.btn-acerca-de {
+  white-space: nowrap; /* Evitar que el texto se ajuste a la siguiente línea */
+  padding-left: 0.6rem; /* Ajusta a tu preferencia */
+  padding-right: 0.6rem; /* Ajusta a tu preferencia */
+}
