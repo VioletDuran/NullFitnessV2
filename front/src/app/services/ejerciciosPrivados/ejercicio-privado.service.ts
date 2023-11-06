@@ -86,4 +86,9 @@ export class EjercicioPrivadoService {
     return this.httpClient.put(url,datos,this.getHttpOptions());
   }
 
+  guardarCalificacion(informacion:any): Observable<any>{
+    let url = this.config.mainUrl + this.config.rutinasUrl + '/calificarRutina';
+    return this.httpClient.post(url,informacion,this.getHttpOptions());
+  }
+
 }

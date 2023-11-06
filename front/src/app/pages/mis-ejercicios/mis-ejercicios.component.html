@@ -12,6 +12,11 @@
                 <div class = "text-center my-1">
                     <button (click)="editarInformacion()" class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Configurar Informacion</button>
                 </div>
+                <div *ngIf = "esAutomatizado">
+                    <div class = "text-center my-1">
+                        <button (click)="rateWithStars(rutinaActual.idrutinas)" class="btn btn-danger rounded-pill text-uppercase fw-bolder text-custom">Calificar Rutina</button>
+                    </div>
+                </div>
             </div>
         </div>
         <hr class="mb-4 mt-0 d-inline-block mx-auto"

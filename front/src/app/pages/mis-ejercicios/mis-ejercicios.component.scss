@@ -2,3 +2,14 @@
     width: 33vh;
     height: 34.5vh;
 }
+
+.star {
+    font-size: 24px;
+    cursor: pointer !important;
+    color: grey;
+}
+  
+.star:hover {
+    color: gold;
+    cursor: pointer !important;
+}

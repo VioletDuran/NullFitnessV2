@@ -199,3 +199,15 @@ ALTER TABLE rutinas_ejercicios
 ADD COLUMN series VARCHAR,
 ADD COLUMN repeticiones VARCHAR,
 ADD COLUMN tiempo VARCHAR;
+
+CREATE TABLE usos_funcionalidad (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    fecha_uso DATE NOT NULL,
+    contador INTEGER DEFAULT 1,
+    CONSTRAINT fk_usuario FOREIGN KEY (user_id) REFERENCES usuarios(idusuario)
+);
+
+ALTER TABLE rutinas
+ADD COLUMN automatizado varchar,
+ADD COLUMN calificacion varchar;

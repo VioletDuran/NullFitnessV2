@@ -92,12 +92,29 @@ const guardarRutina = async(req,res) =>{
             res.status(400).send({msg:"Hubo un error, porfavor intentar de nuevo"});
         }
 
+        if(await generarFotoAleaYAutomatizacion(req.body.idRutina,req.body.datos) == false){
+            res.status(400).send({msg:"Hubo un error, porfavor intentar de nuevo"});
+        }
+
         res.status(200).send(true);
     } catch (err) {
         console.log(error);
         res.status(400).send({msg:"Hubo un error, porfavor intentar de nuevo"});
     } finally {
         client.release();
+    }
+}
+
+async function generarFotoAleaYAutomatizacion(idRutina,ejercicios){
+    try {
+        let indiceAleatorio = Math.floor(Math.random() * ejercicios.length);
+        let idEjercicio = ejercicios[indiceAleatorio].ID;
+        let datosRutina = await pool.query('select foto from ejercicios where idejercicio = $1',[idEjercicio]);
+        await pool.query("UPDATE rutinas SET foto = $1, automatizado = '1' where idrutinas = $2",[datosRutina.rows[0].foto,idRutina]);
+        
+    } catch (error) {
+        console.log(error);
+        return false;
     }
 }
 

@@ -17,4 +17,12 @@ export class RegistroServiceService {
   revisarCorreo(correo:any): Observable<any> {
     return this.httpClient.get(this.url+`/${correo}`);
   }
+
+  recuperarPass(correo:any): Observable<any>{
+    return this.httpClient.post(this.url + '/solicitar-recuperacion',correo);
+  }
+
+  guardarPass(datos:any): Observable<any>{
+    return this.httpClient.post(this.url + '/guardarRecuperacion',datos);
+  }
 }

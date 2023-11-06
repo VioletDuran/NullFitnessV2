@@ -21,6 +21,8 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import { AdministradorComponent } from './pages/administrador/administrador/administrador.component';
 import { EjerciciosRutinasPublicosComponent } from './pages/ejerciciosRutinasPublicos/ejercicios-rutinas-publicos/ejercicios-rutinas-publicos.component';
 import { AcercaDeComponent } from './pages/acerca-de/acerca-de.component';
+import { RecuperarPasswordComponent } from './pages/recuperar-password/recuperar-password.component';
+import { NuevaPasswordComponent } from './pages/nueva-password/nueva-password.component';
 
 
 @NgModule({
@@ -39,6 +41,8 @@ import { AcercaDeComponent } from './pages/acerca-de/acerca-de.component';
     AdministradorComponent,
     EjerciciosRutinasPublicosComponent,
     AcercaDeComponent,
+    RecuperarPasswordComponent,
+    NuevaPasswordComponent,
   ],
   imports: [
     BrowserModule,

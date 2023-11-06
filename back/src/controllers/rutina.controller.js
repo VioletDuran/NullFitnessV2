@@ -1,5 +1,15 @@
 const pool = require('../config/db.config')
 
+const calificarRutina = async(req,res) =>{
+    try {
+        let {idrutinas, calificacion} = req.body;
+        await pool.query('UPDATE rutinas SET calificacion = $1 WHERE idrutinas = $2',[calificacion,idrutinas]);
+        res.status(200).json({ msg: "Calificacion guardada exitosamente, gracias por tu participacion!" });
+    } catch (error) {
+        res.status(500).send({ error: "Error al guardar la calificacion" });
+    }
+}
+
 const devolverRutinas = async (req, res) =>{
     try {
         let id = req.idusuario.idusuario;
@@ -255,5 +265,6 @@ module.exports = {
     editarInfoRutinaPriv,
     modificarRutinas,
     eliminarEjercicioDeRutina,
-    eliminarRutinasPub
+    eliminarRutinasPub,
+    calificarRutina
 }
