@@ -1,0 +1,62 @@
+
+$colorNav:#6D0101;
+$coloLetra1:#FFFFFF;
+.fotoprincipal{
+  background-size: cover;
+  min-height: 65vh;
+  position: relative;
+  color: white;
+  background-position: 50% 70%;
+}
+
+.color-overlay{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-shadow: 2px 2px 2px #26110A;
+}
+@media (min-width: 1200px) {
+  .responsive-font-example {
+    font-size: 4vw;
+  }
+}
+@media (max-width: 1199.98px) {
+  .responsive-font-example {
+    font-size: 6vw;
+  }
+}
+
+.foto-abajo{
+  height:280px;
+}
+
+@media (max-width: 330px) {
+  .foto-abajo{
+    height: 230px;
+  }
+}
+
+.card-height{
+  width: 20rem;
+}
+
+@media (max-width: 330px) {
+  .card-height{
+    width: 17rem;
+  }
+}
+
+.btn-fblanco{
+  background-color:$colorNav;
+  color:$coloLetra1;
+}
+
+.card-img-top {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+}
+
+.fuente {
+  font-size: 1.25rem; /* Cambia "18px" por el tamaño de fuente que prefieras */
+}

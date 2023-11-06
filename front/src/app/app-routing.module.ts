@@ -12,6 +12,8 @@ import { AdministradorComponent } from './pages/administrador/administrador/admi
 import { EjerciciosRutinasPublicosComponent } from './pages/ejerciciosRutinasPublicos/ejercicios-rutinas-publicos/ejercicios-rutinas-publicos.component';
 import { RecuperarPasswordComponent } from './pages/recuperar-password/recuperar-password.component';
 import { NuevaPasswordComponent } from './pages/nueva-password/nueva-password.component';
+import { AcercaDeComponent } from './pages/acerca-de/acerca-de.component';
+
 const routes: Routes = [
   {path:'Ejercicios',component:VistaEjerciciosComponent},
   {path:'Rutinas',component:VistaRutinasComponent},
@@ -24,6 +26,7 @@ const routes: Routes = [
   {path:'EjerciciosRutinasPublicas/:id',component:EjerciciosRutinasPublicosComponent},
   {path:'RecuperarPassword',component:RecuperarPasswordComponent},
   {path:'SolicitarPassword',component:NuevaPasswordComponent},
+  {path:'AcercaDe',component:AcercaDeComponent},
   {path:'',component:MainpageComponent},
   {path:'**',redirectTo:''}
 ];
