@@ -2,7 +2,7 @@ const { Router } = require('express');
 const rutina = Router();
 const userExtractor = require('../middlewares/userExtractor')
 const upload = require('../middlewares/upload')
-const {devolverRutinas,devolverRutinasEspecifica,obtenerEjerciciosPrivados,devolverRutinasPublicas,obtenerEjerciciosPrivadoUsuario,anadirEjercicioARutina,guardarFotoRutina,guardarFotoRutinaPub,guardarNuevaRutinaPub,anadirEjercicioCardio,editarInfoRutinaPriv,modificarRutinas,eliminarEjercicioDeRutina,eliminarRutinasPub} = require('../controllers/rutina.controller')
+const {devolverRutinas,devolverRutinasEspecifica,obtenerEjerciciosPrivados,devolverRutinasPublicas,obtenerEjerciciosPrivadoUsuario,anadirEjercicioARutina,guardarFotoRutina,guardarFotoRutinaPub,guardarNuevaRutinaPub,anadirEjercicioCardio,editarInfoRutinaPriv,modificarRutinas,eliminarEjercicioDeRutina,eliminarRutinasPub,calificarRutina} = require('../controllers/rutina.controller')
 
 //GETS
 rutina.get('/devolverRutinasEspecifica/:id',devolverRutinasEspecifica); //Devolver rutina en especifico - RUTA: rutina
@@ -16,7 +16,8 @@ rutina.post('/anadirEjercicio',userExtractor,anadirEjercicioARutina); //Agregar 
 rutina.post('/guardarFotoRutina',userExtractor,upload.single("myFile"),guardarFotoRutina); //Agregar foto de rutina - RUTA: rutina
 rutina.post('/guardarFotoRutinaPub',userExtractor,upload.single("myFile"),guardarFotoRutinaPub); //Agregar foto de rutina publica - RUTA: rutina
 rutina.post('/guardarNuevaRutinaPub',userExtractor,guardarNuevaRutinaPub);
-rutina.post('/anadirEjercicioCardio',userExtractor,anadirEjercicioCardio); // Agregar un ejercicio de cardio a una rutina - RUTA: rutina 
+rutina.post('/anadirEjercicioCardio',userExtractor,anadirEjercicioCardio); // Agregar un ejercicio de cardio a una rutina - RUTA: rutina
+rutina.post('/calificarRutina',userExtractor,calificarRutina)
 
 //PUTS
 rutina.put('/editarInfoRutinaPriv',userExtractor,editarInfoRutinaPriv); //Editar informacion de rutina privada - RUTA: rutina 

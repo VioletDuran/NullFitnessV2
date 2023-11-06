@@ -21,6 +21,7 @@ export class MisEjerciciosComponent implements OnInit {
   ejerciciosTotales : EjerciciosPublicosAux[] = [];
   rutinaActual?: Rutina | any ;
   datosCargados = false;
+  esAutomatizado = false;
   constructor(private _route:ActivatedRoute, private ejerciciosPriv:EjercicioPrivadoService, private router:Router, private estado:ServicioLoginService) {
   }
 
@@ -52,7 +53,9 @@ export class MisEjerciciosComponent implements OnInit {
         this.ejerciciosUsuario[i].repeticiones = this.idEjerciciosUsuario[i].repeticiones;
         this.ejerciciosUsuario[i].tiempo = this.idEjerciciosUsuario[i].tiempo;
       }
-  
+      if(this.rutinaActual.automatizado == '1'){
+        this.esAutomatizado = true;
+      }
       this.datosCargados = true;
     })
   }
@@ -182,6 +185,78 @@ export class MisEjerciciosComponent implements OnInit {
             })
         }
     })
+  }
+
+  rateWithStars(idrutinas:any) {
+    let rating = 0;
+  
+    Swal.fire({
+      title: 'Califica esta Rutina',
+      html: '<div style="display: flex; align-items: center; justify-content: center;">' +
+            '<span class="star" data-value="1" style="margin-right: 10px; font-size: 18px; cursor: pointer;">1</span>' + 
+            '<div class="rating">' +
+            '  <span class="star" data-value="1">&#9733;</span>' +
+            '  <span class="star" data-value="2">&#9733;</span>' +
+            '  <span class="star" data-value="3">&#9733;</span>' +
+            '  <span class="star" data-value="4">&#9733;</span>' +
+            '  <span class="star" data-value="5">&#9733;</span>' +
+            '</div>' +
+            '<span class="star" data-value="5" style="margin-left: 10px; font-size: 18px; cursor: pointer;">5</span>' +
+            '</div>',
+      cancelButtonColor: "grey",
+      confirmButtonColor: "green",
+      showCancelButton: true,
+      preConfirm: () => {
+        return rating;
+      },
+      didRender: () => {
+        const ratingElement = document.querySelector('.rating');
+        ratingElement?.addEventListener('click', (event) => {
+          const target = event.target as HTMLElement;
+          if (target && target.classList.contains('star')) {
+            const value = target.getAttribute('data-value');
+            if (value) {
+              rating = parseInt(value, 10);
+              const stars = document.querySelectorAll('.star');
+              stars.forEach((star: Element) => {
+                const starElement = star as HTMLElement;
+                const starValue = parseInt(starElement.getAttribute('data-value') || '0', 10);
+                starElement.style.color = starValue <= rating ? 'gold' : 'grey';
+              });
+            }
+          }
+        });
+
+          // Cambia el estilo del cursor para todos los elementos con clase 'star'
+          const stars = document.querySelectorAll('.star');
+          stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+              (star as HTMLElement).style.cursor = 'pointer';
+            });
+            star.addEventListener('mouseout', () => {
+              (star as HTMLElement).style.cursor = '';
+            });
+          });
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ejerciciosPriv.guardarCalificacion({idrutinas : idrutinas, calificacion: rating}).subscribe((valor) =>{
+          Swal.fire({
+            title: valor.msg,
+            icon: "success",
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: 'green',
+          })
+        }, (error) =>{
+          Swal.fire({
+            title: error.msg,
+            icon: "error",
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: 'red',
+          })
+        })
+      }
+    });
   }
 
 

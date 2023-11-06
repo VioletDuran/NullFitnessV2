@@ -10,6 +10,8 @@ import { RegistroComponent } from './pages/registro/registro.component';
 import { MisEjerciciosComponent } from './pages/mis-ejercicios/mis-ejercicios.component';
 import { AdministradorComponent } from './pages/administrador/administrador/administrador.component';
 import { EjerciciosRutinasPublicosComponent } from './pages/ejerciciosRutinasPublicos/ejercicios-rutinas-publicos/ejercicios-rutinas-publicos.component';
+import { RecuperarPasswordComponent } from './pages/recuperar-password/recuperar-password.component';
+import { NuevaPasswordComponent } from './pages/nueva-password/nueva-password.component';
 const routes: Routes = [
   {path:'Ejercicios',component:VistaEjerciciosComponent},
   {path:'Rutinas',component:VistaRutinasComponent},
@@ -20,6 +22,8 @@ const routes: Routes = [
   {path:'MisEjercicios/:id', component:MisEjerciciosComponent},
   {path:'Administrador',component:AdministradorComponent},
   {path:'EjerciciosRutinasPublicas/:id',component:EjerciciosRutinasPublicosComponent},
+  {path:'RecuperarPassword',component:RecuperarPasswordComponent},
+  {path:'SolicitarPassword',component:NuevaPasswordComponent},
   {path:'',component:MainpageComponent},
   {path:'**',redirectTo:''}
 ];

@@ -3,6 +3,52 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 const fotoOriginal = "../../../assets/img/usuario.png"
+const nodemailer = require('nodemailer');
+
+const guardarRecuperacion = async(req,res) =>{
+  const { token, nuevaContrasena } = req.body;
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const hashedPassword = await bcrypt.hashSync(nuevaContrasena, 10); 
+    await pool.query('UPDATE usuarios SET contraseña = $1 WHERE idusuario = $2', [hashedPassword, payload.idusuario]);
+    res.status(200).send({error:'Tu contraseña ha sido restablecida.'});
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({error:'Error al restablecer la contraseña.'});
+  }
+}
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USERNAME,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+const solicitarRecuperacion = async(req,res) =>{
+    const email= req.body;
+    try {
+      const user = await pool.query('SELECT idusuario FROM usuarios WHERE correo = $1', [email.correo]);
+      if (user.rowCount === 0) {
+        return res.status(400).send('Correo no encontrado.');
+      }
+
+      const token = jwt.sign({ idusuario: user.rows[0].idusuario }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const resetUrl = `http://localhost:4200/#/SolicitarPassword?token=${token}`;
+  
+      const mailOptions = {
+        from: process.env.EMAIL_USERNAME,
+        to: email.correo,
+        subject: 'Recuperación de contraseña',
+        text: `Para restablecer tu contraseña, por favor sigue este enlace: ${resetUrl}`
+      };
+      await transporter.sendMail(mailOptions);
+      res.status(200).send({error:'Se ha enviado un enlace de recuperación a tu correo electrónico.'});
+    } catch (error) {
+      res.status(500).send('Error al solicitar la recuperación de contraseña.');
+    }
+}
 
 const registrarUsuario = async (req, res, next) => {
     try {
@@ -88,7 +134,6 @@ const devolverDatos =  async (req, res) => {
         let resultado = response.rows[0];
         return res.json(resultado);
     } catch (error) {
-        console.log(error)
         return res.status(404);
     }
 }
@@ -103,7 +148,6 @@ const revisarCorreo =  async (req, res) => {
            return  res.status(200).send({msg:'La cuenta se creo de manera correcta.'}); 
         }
     } catch (error) {
-        console.log(error)
         return res.status(500)
     }
 }
@@ -171,4 +215,4 @@ const consultarCantidad = async(req,res) => {
   }
 }
 
-module.exports = {registrarUsuario,loginUsuario,guardarFoto,devolverDatos,revisarCorreo,modificarDatos,consultarCantidad}
+module.exports = {registrarUsuario,loginUsuario,guardarFoto,devolverDatos,revisarCorreo,modificarDatos,consultarCantidad,solicitarRecuperacion,guardarRecuperacion}

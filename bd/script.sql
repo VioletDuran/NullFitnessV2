@@ -207,3 +207,7 @@ CREATE TABLE usos_funcionalidad (
     contador INTEGER DEFAULT 1,
     CONSTRAINT fk_usuario FOREIGN KEY (user_id) REFERENCES usuarios(idusuario)
 );
+
+ALTER TABLE rutinas
+ADD COLUMN automatizado varchar,
+ADD COLUMN calificacion varchar;
