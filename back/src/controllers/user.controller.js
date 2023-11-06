@@ -167,48 +167,28 @@ const modificarDatos =  async (req, res) => {
 }
 
 const consultarCantidad = async(req,res) => {
-    // Obtener el user_id del token (asegúrate de implementar la autenticación adecuada)
   const user_id = req.idusuario.idusuario;
-  const fechaActual = new Date().toISOString().slice(0, 10); // Formato de fecha AAAA-MM-DD
+  const fechaActual = new Date().toISOString().slice(0, 10);
 
   try {
-    // Iniciar transacción
     await pool.query('BEGIN');
 
-    // Consultar el uso actual del día
     const usoDelDia = await pool.query(
       'SELECT contador FROM usos_funcionalidad WHERE user_id = $1 AND fecha_uso = $2',
       [user_id, fechaActual]
     );
 
     if (usoDelDia.rowCount > 0) {
-      // Ya hay registros para hoy, comprobar si el usuario puede usar la funcionalidad
       if (usoDelDia.rows[0].contador >= 6) {
-        // Usuario ha alcanzado el límite
+
         await pool.query('COMMIT');
         return res.status(429).json({ error: 'Has alcanzado el límite de usos por hoy.' });
-      } else {
-        // Incrementar el contador
-        await pool.query(
-          'UPDATE usos_funcionalidad SET contador = contador + 1 WHERE user_id = $1 AND fecha_uso = $2',
-          [user_id, fechaActual]
-        );
-      }
-    } else {
-      // No hay registros para hoy, crear uno nuevo
-      await pool.query(
-        'INSERT INTO usos_funcionalidad (user_id, fecha_uso, contador) VALUES ($1, $2, $3)',
-        [user_id, fechaActual, 1]
-      );
+      } 
     }
-
-    // Finalizar transacción
     await pool.query('COMMIT');
+    res.status(200).json({valor:true});
 
-    // Realizar la funcionalidad aquí, luego enviar respuesta al cliente
-    res.json({ success: 'La funcionalidad se ha utilizado con éxito.' });
   } catch (error) {
-    // Si hay un error, revertir la transacción
     await pool.query('ROLLBACK');
     console.error('Error al usar la funcionalidad:', error);
     res.status(500).json({ error: 'Error del servidor al intentar usar la funcionalidad.' });

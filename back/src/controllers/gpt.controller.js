@@ -67,6 +67,7 @@ const generarRecomendacion = async(req,res) =>{
 
 const guardarRutina = async(req,res) =>{
     let data = req.body.datos;
+    let idUsuario = req.idusuario.idusuario;
     const eliminarRutinaAnterior = await pool.query('DELETE FROM rutinas_ejercicios WHERE idrutinas = $1',[req.body.idRutina]);
     const client = await pool.connect();
     try {
@@ -96,12 +97,41 @@ const guardarRutina = async(req,res) =>{
             res.status(400).send({msg:"Hubo un error, porfavor intentar de nuevo"});
         }
 
+        if(await sumarContador(idUsuario) == false){
+            res.status(400).send({msg:"Hubo un error, porfavor intentar de nuevo"});
+        }
+
+
         res.status(200).send(true);
     } catch (err) {
         console.log(error);
         res.status(400).send({msg:"Hubo un error, porfavor intentar de nuevo"});
     } finally {
         client.release();
+    }
+}
+
+async function sumarContador(user_id){
+    try {
+        const fechaActual = new Date().toISOString().slice(0, 10); // Formato de fecha AAAA-MM-DD
+        const usoDelDia = await pool.query(
+            'SELECT contador FROM usos_funcionalidad WHERE user_id = $1 AND fecha_uso = $2',
+            [user_id, fechaActual]
+        );
+
+        if (usoDelDia.rowCount > 0){
+            await pool.query(
+                'UPDATE usos_funcionalidad SET contador = contador + 1 WHERE user_id = $1 AND fecha_uso = $2',
+                [user_id, fechaActual]
+              );
+        } else {
+            await pool.query(
+                'INSERT INTO usos_funcionalidad (user_id, fecha_uso, contador) VALUES ($1, $2, $3)',
+                [user_id, fechaActual, 1]
+            );
+        }
+    } catch (error) {
+        return false
     }
 }
 
