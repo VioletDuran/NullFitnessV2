@@ -70,20 +70,16 @@ export class RegistroComponent implements OnInit {
       }
       if (this.formularioRegistro.status === 'VALID') {
       let datos = this.formularioRegistro.value;
-      this.servicio.revisarCorreo(datos.correo).subscribe((value) =>{
-        console.log(value);
-
-        Swal.fire({
-            title: 'Registro exitoso!',
-            text: value.msg,
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#00a000'
-        });
-        this.router.navigate(['']);
-    },(error) => {
-        console.log(error);
-
+        this.servicio.completarRegistro(datos).subscribe((valor) =>{
+            Swal.fire({
+                title: 'Registro exitoso!',
+                text: valor.msg,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#00a000'
+            });
+            this.router.navigate(['']);
+        },(error) => {
         if (error.status === 409)  // Conflict
           Swal.fire({
             title: 'Error!',
@@ -92,8 +88,8 @@ export class RegistroComponent implements OnInit {
             confirmButtonText: 'Aceptar',
             confirmButtonColor: "#6D0101"
           });
-    }
-);
+        }
+        );
     }
   }
 }

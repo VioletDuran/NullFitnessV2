@@ -24,11 +24,11 @@
 									<input type="password" class="form-input" id="campoContraseña"
 									       placeholder="**********"
 									       formControlName="contraseña"(click) = "pass()">
-									<div *ngIf="formularioLogin.get('password')?.touched && formularioLogin.get('password')?.errors?.['required'] || passw == false "
+									<div *ngIf="formularioLogin.get('contraseña')?.touched && formularioLogin.get('contraseña')?.errors?.['required'] || passw == false "
 									     class="errorCualquiera	">Este campo es obligatorio
 									</div>
 
-									<div *ngIf="formularioLogin.get('password')?.touched && formularioLogin.get('password')?.errors?.['pattern']"
+									<div *ngIf="formularioLogin.get('contraseña')?.touched && formularioLogin.get('contraseña')?.errors?.['pattern']"
 									     class="errorCualquiera">La contraseña debe como minimo una letra, un numero y 6 caracteres
 									</div>
 									<div id="catpchaElemen">

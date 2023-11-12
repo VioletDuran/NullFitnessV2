@@ -10,12 +10,9 @@ export class RegistroServiceService {
   url:string = "http://localhost:3000/users"
   constructor(private httpClient:HttpClient) {
   }
-  completarRegistro(registroLleno:any){
-    let form: Registro = registroLleno;
-    this.httpClient.post(this.url+"/registro",form).subscribe();
-  }
-  revisarCorreo(correo:any): Observable<any> {
-    return this.httpClient.get(this.url+`/${correo}`);
+
+  completarRegistro(registroLleno:any):Observable<any>{
+    return this.httpClient.post(this.url+"/registro",registroLleno);
   }
 
   recuperarPass(correo:any): Observable<any>{

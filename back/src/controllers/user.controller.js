@@ -64,8 +64,7 @@ const registrarUsuario = async (req, res, next) => {
         crearRutinas(idUsuario);
         return res.status(200).send({msg:'Se creado su cuenta con exito!'});
     } catch (error) {
-        console.error(error); 
-        return res.status(500).send(false); 
+        return res.status(500).send({msg:'Error inesperado!'}); 
     }
 }
 
