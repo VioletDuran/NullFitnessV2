@@ -138,7 +138,7 @@ export class MiPerfilComponent implements OnInit {
     Swal.fire({
       title: "Datos para generar recomendación",
       html: `<hr>
-            <a>Recuerda rellenar tu informacion para hacer la rutina mas exacta</a>
+            <b>Recuerda llenar tu información para hacer la rutina más exacta.</b>
             <hr>
             <form class = "text-start mx-5">
             <select class="swal2-input" id="intensidad" name="intensidad" style="width: 17rem"">
@@ -175,7 +175,7 @@ export class MiPerfilComponent implements OnInit {
           Swal.showValidationMessage(`Debe seleccionar por lo menos un musculo`);
         } else {
           Swal.fire({
-            title: "Estamos generando tu rutina, esto puede tomar un tiempo, te autodirigiremos a la rutina una vez creada.",
+            title: "Estamos generando tu rutina; esto puede tomar un tiempo. Te redirigiremos automáticamente a la rutina una vez creada.",
             html: '<img src="../../../assets/img/pesos-academia.gif" alt="Cargando..." style="width: 300px; height: 200px;"/>',
             showConfirmButton: false,
             allowOutsideClick: false
@@ -192,9 +192,21 @@ export class MiPerfilComponent implements OnInit {
           }
           this.perfil.revisarCantidad().subscribe((valor) => {
             this.perfil.generarRutinaUsuario(infoGeneracion).subscribe((valor) => {
+              let info;
+              console.log(valor);
+              try {
+                info = JSON.parse(valor.content).Rutina
+              } catch (error) {
+                Swal.fire({
+                  title: 'Hubo un error, intente de nuevo!',
+                  icon: 'error',
+                  confirmButtonText: 'Aceptar',
+                  confirmButtonColor: "#6D0101"
+                })
+              }
               let datosRutina = {
                 idRutina: idRutina,
-                datos: JSON.parse(valor.content).Rutina,
+                datos: info,
                 musculos: musculosSeleccionados
               }
               this.perfil.guardarRutinaUsuario(datosRutina).subscribe((respuesta) => {
@@ -218,7 +230,7 @@ export class MiPerfilComponent implements OnInit {
                 confirmButtonColor: "#6D0101"
               })
             })
-          }, (error) =>{
+          }, (error) => {
             Swal.fire({
               title: 'Error!',
               text: error.error.error,
@@ -275,42 +287,65 @@ export class MiPerfilComponent implements OnInit {
       confirmButtonColor: 'green',
       cancelButtonText: 'Cancelar',
       preConfirm: () => {
+        let flag = true;
 
-        const edad = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#edad'))?.value;
+        let edad = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#edad'))?.value;
         let edadUsuario = Number(edad);
 
-        const peso = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#peso'))?.value;
+        let peso = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#peso'))?.value;
         let pesoUsuario = Number(peso);
 
-        const objetivo = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#objetivo'))?.value;
-        let objetivoUsuario = document.getElementById(objetivo!)!.textContent
+        let objetivo = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#objetivo'))?.value;
+        let objetivoUsuario: any = document.getElementById(objetivo!)!.textContent
 
-        const genero = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#genero'))?.value;
-        let generoUsuario = document.getElementById(genero!)!.textContent
+        let genero = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#genero'))?.value;
+        let generoUsuario: any = document.getElementById(genero!)!.textContent
 
-        const altura = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#altura'))?.value;
+        let altura = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#altura'))?.value;
         let alturaUsuario = Number(altura);
 
-        const experiencia = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#experiencia'))?.value;
-        let experienciaUsuario = document.getElementById(experiencia!)!.textContent
+        let experiencia = (<HTMLInputElement | null>Swal.getPopup()?.querySelector('#experiencia'))?.value;
+        let experienciaUsuario: any = document.getElementById(experiencia!)!.textContent
 
 
-        if (edadUsuario < 16 || edadUsuario > 99) {
-          Swal.showValidationMessage(`Porfavor ingresa una edad valida entre 16 y 99 años`);
+        if(edad == ''){
+          edad = undefined;
+        } else if (edadUsuario < 16 || edadUsuario > 99) {
+          Swal.showValidationMessage('Porfavor ingresa una edad valida entre 16 y 99 años');
+          flag = false;
         }
-        else if (pesoUsuario < 40 || pesoUsuario > 300) {
-          Swal.showValidationMessage(`Porfavor ingresa un peso valido entre 40 y 300 kg`);
+
+        if(peso == ''){
+          peso = undefined;
+        } else if (pesoUsuario < 40 || pesoUsuario > 300) {
+          Swal.showValidationMessage('Porfavor ingresa un peso valido entre 40 y 300 kg');
+          flag = false;
         }
-        else if (objetivo == "preter") {
-          Swal.showValidationMessage(`Porfavor elija un objetivo valido`);
+
+        if (objetivo == "preter") {
+          objetivoUsuario = undefined;
         }
-        else if (genero == "preter") {
-          Swal.showValidationMessage(`Porfavor elija un genero valido`);
+
+        if (genero == "preter") {
+          generoUsuario = undefined;
+        }
+
+        console.log(altura);
+
+        if(altura == ''){
+          altura = undefined;
         } else if (alturaUsuario < 120 || alturaUsuario > 300) {
-          Swal.showValidationMessage(`Porfavor elija una altura entre 120 a 300 cms`);
-        } else if (experiencia == "preter") {
-          Swal.showValidationMessage(`Porfavor elija una experiencia valida`);
-        } else {
+          Swal.showValidationMessage('Porfavor elija una altura entre 120 a 300 cms');
+          flag = false;
+        }
+
+        
+
+        if (experiencia == "preter") {
+          experienciaUsuario = undefined;
+        }
+
+        if(flag == true){
           let datosUsuario: datosModificables = {
             idusuario: this.estado.idUsuario,
             edad: edad!,
@@ -320,34 +355,40 @@ export class MiPerfilComponent implements OnInit {
             altura: altura!,
             experiencia: experienciaUsuario!
           }
-
-
-          this.perfil.actualizarInformacionUsuario(datosUsuario).subscribe((valor) => {
-            if (valor == true) {
-              Swal.fire({
-                title: 'Modificacion Correcta',
-                text: 'Se modifico tu informacion correctamente.',
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: 'green',
-                preConfirm: () => {
-                  location.reload();
-                }
-              })
-            } else {
-              Swal.fire({
-                title: 'Hubo un error en la actualizacion',
-                icon: 'error',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: 'red',
-                preConfirm: () => {
-                  location.reload();
-                }
-              })
-            }
+          
+        this.perfil.actualizarInformacionUsuario(datosUsuario).subscribe((valor) => {
+          if (valor == true) {
+            Swal.fire({
+              title: 'Modificacion Correcta',
+              text: 'Se modifico tu informacion correctamente.',
+              icon: 'success',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: 'green',
+              preConfirm: () => {
+                location.reload();
+              }
+            })
+          } else {
+            Swal.fire({
+              title: 'Hubo un error en la actualizacion',
+              icon: 'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: 'red',
+              preConfirm: () => {
+                location.reload();
+              }
+            })
+          }
+        },(error) =>{
+          Swal.fire({
+            title: error.error,
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: 'red',
           })
-        }
+        })
       }
+        }
     })
   }
   cambiarFotoPriv($event: any, idrutinas: any) {

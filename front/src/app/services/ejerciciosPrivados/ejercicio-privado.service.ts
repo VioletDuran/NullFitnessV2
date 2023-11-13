@@ -58,7 +58,7 @@ export class EjercicioPrivadoService {
 
   revisarExisteEjercicio(ejercicio:any): Observable<any>{
     let url = this.config.mainUrl + this.config.ejercicioUrl + '/revisarEjercicioRutina';
-    return this.httpClient.post('http://localhost:3000/users/revisarEjercicioRutina',ejercicio,this.getHttpOptions());
+    return this.httpClient.post(url,ejercicio,this.getHttpOptions());
   }
   
   editarInfoRutinaPriv(informacion:any): Observable<any>{

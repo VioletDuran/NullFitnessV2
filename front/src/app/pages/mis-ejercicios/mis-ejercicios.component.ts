@@ -73,7 +73,7 @@ export class MisEjerciciosComponent implements OnInit {
           idejericio:idEjericio
         }
         this.ejerciciosPriv.eliminarEjercicioDeRutina(dataRutinaEjercicios);
-        this.router.navigate(['/MiPerfil']);
+        location.reload();
       }
     })
   }

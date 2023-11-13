@@ -121,7 +121,7 @@ const revisarEjercicioRutina = async(req, res) => {
 
 const editarEjercicioPublico = async (req, res) => {
     const { idejercicio, tituloejercicio, descripcion, video, musculos } = req.body;
-
+    
     try {
         // Comenzar una transacción
         await pool.query('BEGIN');

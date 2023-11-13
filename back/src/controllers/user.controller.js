@@ -151,19 +151,62 @@ const revisarCorreo =  async (req, res) => {
     }
 }
 
-const modificarDatos =  async (req, res) => {
-    try {
-        const {idusuario, edad, peso, objetivo, genero, altura, experiencia} = req.body;
-        const response = await pool.query('UPDATE usuarios SET edad = $2,peso = $3, objetivo = $4, genero = $5, altura = $6, experiencia = $7 WHERE idusuario = $1',[idusuario, edad, peso, objetivo, genero, altura, experiencia])
-        pool.end;
-        console.log(req.body);
-        if(response){
-            res.status(200).send(true);
-        }
-    } catch (error) {
-        res.status(200).send(false);
-    }
-}
+const modificarDatos = async (req, res) => {
+  try {
+      const { idusuario, edad, peso, objetivo, genero, altura, experiencia } = req.body;
+
+      // Preparar las partes de la consulta SQL
+      let query = 'UPDATE usuarios SET ';
+      let queryParams = [];
+      let queryValues = [];
+
+      // Agregar cada campo a la consulta si estÃ¡ presente en req.body
+      if (edad !== undefined) {
+          queryParams.push('edad = $' + (queryParams.length + 1));
+          queryValues.push(edad);
+      }
+      if (peso !== undefined) {
+          queryParams.push('peso = $' + (queryParams.length + 1));
+          queryValues.push(peso);
+      }
+      if (objetivo !== undefined) {
+          queryParams.push('objetivo = $' + (queryParams.length + 1));
+          queryValues.push(objetivo);
+      }
+      if (genero !== undefined) {
+          queryParams.push('genero = $' + (queryParams.length + 1));
+          queryValues.push(genero);
+      }
+      if (altura !== undefined) {
+          queryParams.push('altura = $' + (queryParams.length + 1));
+          queryValues.push(altura);
+      }
+      if (experiencia !== undefined) {
+          queryParams.push('experiencia = $' + (queryParams.length + 1));
+          queryValues.push(experiencia);
+      }
+
+      // Comprobar si hay campos para actualizar
+      if (queryParams.length === 0) {
+          return res.status(400).send('No hay campos para actualizar.');
+      }
+
+      // Completar y ejecutar la consulta SQL
+      query += queryParams.join(', ') + ' WHERE idusuario = $' + (queryParams.length + 1);
+      queryValues.push(idusuario);
+
+      const response = await pool.query(query, queryValues);
+
+      if (response.rowCount > 0) {
+          res.status(200).send(true);
+      } else {
+          res.status(200).send(false);
+      }
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Error al actualizar los datos.');
+  }
+};
 
 const consultarCantidad = async(req,res) => {
   const user_id = req.idusuario.idusuario;

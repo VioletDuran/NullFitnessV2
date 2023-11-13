@@ -125,7 +125,15 @@ export class AdministradorComponent implements OnInit {
       showCancelButton: true,
       preConfirm:() => {
         this.servicio.eliminarEjercicioPublico({idejercicio:id});
-        location.reload();
+        Swal.fire({
+          title: "Ejercicio eliminado con exito!",
+          icon: "success",
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: 'green',
+          preConfirm:() => {
+            location.reload();
+          }
+        })
       }
     })
   }
@@ -170,11 +178,19 @@ export class AdministradorComponent implements OnInit {
           Swal.showValidationMessage(`Debe seleccionar por lo menos un musculo`);
         } else {
           this.servicio.modificarEjerciciosPublicos({ idejercicio: id, tituloejercicio: tituloejercicio, descripcion: descripcion, video: video, musculos: musculosSeleccionados }).subscribe((valor) => {
-            if (valor == true) {
+            if (valor.success == true) {
               if(foto?.length != 0){
                 this.anadirFotoEjer(foto,id);
               }
-              location.reload();
+              Swal.fire({
+                title: "Ejercicio modificado con exito!",
+                icon: "success",
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: 'green',
+                preConfirm:() => {
+                  location.reload();
+                }
+              })
             }
           })
         }
@@ -228,6 +244,15 @@ export class AdministradorComponent implements OnInit {
         }else{
           this.servicio.guardarNuevoEjercicio({tituloejercicio: tituloejercicio, descripcion: descripcion, video: video, musculos: musculosSeleccionados }).subscribe((valor) =>{
             this.anadirFotoEjer(foto,valor);
+            Swal.fire({
+              title: "Ejercicio añadido con exito!",
+              icon: "success",
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: 'green',
+              preConfirm:() => {
+                location.reload();
+              }
+            })
           })
         }
       }
@@ -250,15 +275,6 @@ export class AdministradorComponent implements OnInit {
     body.append('myFile', this.fileTemp.fileRaw, this.fileTemp.fileName);
     this.servicio.guardarFotoEjercicio(body).subscribe((valor)=>{
       if(valor == true){
-        Swal.fire({
-          title: "Ejercicio añadido con exito!",
-          icon: "success",
-          confirmButtonText: 'Aceptar',
-          confirmButtonColor: 'green',
-          preConfirm:() => {
-            location.reload();
-          }
-        })
       }
     })
   }
@@ -303,11 +319,19 @@ export class AdministradorComponent implements OnInit {
           Swal.showValidationMessage(`Debe seleccionar por lo menos un ejercicio`);
         } else {
           this.servicio.modificarRutinas({ idrutinas: id, titulorutina: titulorutina, descripcion: descripcion,ejercicios: ejerciciosSeleccionados }).subscribe((valor) => {
-            if (valor == true) {
+            if (valor.success == true) {
               if(foto?.length != 0){
                 this.anadirFotoRutPub(foto,id);
               }
-              location.reload();
+              Swal.fire({
+                title: "Rutina modificada con exito!",
+                icon: "success",
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: 'green',
+                preConfirm:() => {
+                  location.reload();
+                }
+              })
             }
           })
         }
@@ -341,7 +365,15 @@ export class AdministradorComponent implements OnInit {
       showCancelButton: true,
       preConfirm:() => {
         this.servicio.eliminarRutinaPub({idrutinas:id});
-        location.reload();
+        Swal.fire({
+          title: "Rutina Eliminada con exito!",
+          icon: "success",
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: 'green',
+          preConfirm:() => {
+            location.reload();
+          }
+        })
       }
     })
   }
@@ -389,8 +421,16 @@ export class AdministradorComponent implements OnInit {
           Swal.showValidationMessage(`Debe subir una fotografia`);
         }else{
           this.servicio.guardarNuevaRutinaPub({titulorutina: titulorutina, descripcion: descripcion,ejercicios: ejerciciosSeleccionados}).subscribe((valor) =>{
-            this.anadirFotoRutPub(foto,valor);
-            location.reload();
+            this.anadirFotoRutPub(foto,valor.id);
+            Swal.fire({
+              title: "Rutina añadida con exito!",
+              icon: "success",
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: 'green',
+              preConfirm:() => {
+                location.reload();
+              }
+            })
           })
         }
       }
