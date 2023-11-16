@@ -99,14 +99,18 @@ export class MisEjerciciosComponent implements OnInit {
           Swal.showValidationMessage(`El titulo no puede estar vacio`);
         }else{
           this.ejerciciosPriv.editarInfoRutinaPriv({idrutinas: this._route.snapshot.paramMap.get('id'),titulorutina : titulorutina, descripcion : descripcion}).subscribe((valor) => {
-            if(valor == true){
+            if(valor.success == true){
               Swal.fire({
                 title: 'Rutina modificada exitosamente!',
                 icon: 'success',
                 confirmButtonText: 'Aceptar',
-                confirmButtonColor: 'green'
+                confirmButtonColor: 'green',
+                allowOutsideClick: false,
+                preConfirm: ()=>{
+                  location.reload();
+                }
               })
-              this.router.navigate(['/MiPerfil']);
+
             }
           })
         }

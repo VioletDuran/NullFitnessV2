@@ -4,7 +4,7 @@ const calificarRutina = async(req,res) =>{
     try {
         let {idrutinas, calificacion} = req.body;
         await pool.query('UPDATE rutinas SET calificacion = $1 WHERE idrutinas = $2',[calificacion,idrutinas]);
-        res.status(200).json({ msg: "Calificacion guardada exitosamente, gracias por tu participacion!" });
+        res.status(200).json({ msg: "Calificación guardada exitosamente, gracias por tu participación!" });
     } catch (error) {
         res.status(500).send({ error: "Error al guardar la calificacion" });
     }
