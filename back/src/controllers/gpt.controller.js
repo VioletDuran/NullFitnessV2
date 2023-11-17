@@ -68,7 +68,6 @@ const generarRecomendacion = async(req,res) =>{
 const guardarRutina = async(req,res) =>{
     let data = req.body.datos;
     let idUsuario = req.idusuario.idusuario;
-    const eliminarRutinaAnterior = await pool.query('DELETE FROM rutinas_ejercicios WHERE idrutinas = $1',[req.body.idRutina]);
     const client = await pool.connect();
     try {
         const insertQueries = data.map(data => {
@@ -84,6 +83,8 @@ const guardarRutina = async(req,res) =>{
                 };
             }
         });
+
+        const eliminarRutinaAnterior = await pool.query('DELETE FROM rutinas_ejercicios WHERE idrutinas = $1',[req.body.idRutina]);
 
         for (let query of insertQueries) {
             await client.query(query);
@@ -104,7 +105,7 @@ const guardarRutina = async(req,res) =>{
 
         res.status(200).send(true);
     } catch (err) {
-        console.log(error);
+        console.log(err);
         res.status(400).send({msg:"Hubo un error, porfavor intentar de nuevo"});
     } finally {
         client.release();
